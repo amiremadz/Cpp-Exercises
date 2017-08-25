@@ -11,7 +11,6 @@
 
 using namespace std;
 
-
 int counter = 0;
 
 class Person{
@@ -23,8 +22,10 @@ public:
 
 	Person(string name, int age): mName(name), mAge(age) {}
 public:
-	void print() {
-		cout << mName << ": " << mAge << endl;
+	// The keys in the map are returned as consts
+	// So, method must be const
+	void print() const {
+		cout << mName << ": " << mAge << flush;
 	}
 public:
 	Person(const Person &other){
@@ -33,9 +34,19 @@ public:
 		mAge = other.mAge;
 		mName = other.mName;
 	}
+public:
+	// This is needed for map to be able to sort keys
+	bool operator<(const Person &other) const {
+		if(mName == other.mName){
+			return mAge < other.mAge;
+		}
+		return mName < other.mName;
+	}
 };
 
 int main() {
+
+	// Basics
 
 	map<string, int> ages;
 
@@ -98,6 +109,23 @@ int main() {
 		itt->second.print();
 	}
 
+	// Objects as map keys
+
+	map<Person, int> ppl;
+
+	ppl[Person("Julie", 40)] = 44;
+	ppl[Person("John", 30)] = 33;
+	ppl[Person("Jack", 20)] = 22;
+	ppl[Person("Jack", 20)] = 55;    // Key already exists
+	ppl[Person("Jack", 60)] = 66;	 // Key does not change if age is not used in < operator
+
+	map<Person, int>::iterator ittr;
+
+	for(ittr=ppl.begin(); ittr!=ppl.end(); ittr++){
+		cout << ittr->second << " : " << flush;
+		ittr->first.print();
+		cout << endl;
+	}
 
 	return 0;
 }
