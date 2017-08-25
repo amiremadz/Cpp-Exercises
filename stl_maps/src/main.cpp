@@ -90,7 +90,10 @@ int main() {
 		cout << it->first << " : " << it->second << endl;
 	}
 
+	cout << endl;
+
 	// Objects as map values
+
 	map<int, Person> people;
 
 	Person("John", 12);
@@ -109,6 +112,9 @@ int main() {
 		itt->second.print();
 	}
 
+	cout << endl;
+	cout << endl;
+
 	// Objects as map keys
 
 	map<Person, int> ppl;
@@ -125,6 +131,43 @@ int main() {
 		cout << ittr->second << " : " << flush;
 		ittr->first.print();
 		cout << endl;
+	}
+
+	cout << endl;
+
+	// Multimaps
+
+	multimap<int, string> lockup;
+
+	lockup.insert(make_pair(20, "John"));
+	lockup.insert(make_pair(40, "Wen"));
+	lockup.insert(make_pair(30, "Jack"));
+	lockup.insert(make_pair(10, "Sue"));
+	lockup.insert(make_pair(30, "Lili"));
+	lockup.insert(make_pair(20, "Mike"));
+
+	multimap<int, string>::iterator itt_m;
+
+	for(itt_m=lockup.begin(); itt_m!=lockup.end(); itt_m++){
+		cout << itt_m->first << " : " << itt_m->second << endl;
+	}
+
+	cout << lockup.find(20)->second << endl;
+
+	typedef multimap<int, string>::iterator mlp_itt_t;
+
+	pair<mlp_itt_t, mlp_itt_t> info;
+
+	info = lockup.equal_range(30);
+
+	for(mlp_itt_t itt = info.first; itt!=info.second; itt++){
+		cout << itt->first << " : " << itt->second << endl;
+	}
+
+	auto result = lockup.equal_range(20);
+
+	for(auto itt=result.first; itt!=result.second; itt++){
+		cout << itt->first << " : " << itt->second << endl;
 	}
 
 	return 0;
