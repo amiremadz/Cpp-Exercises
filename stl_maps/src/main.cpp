@@ -18,6 +18,7 @@ private:
 	string mName;
 	int mAge;
 public:
+	// Empty constructor is need if object is to be used as map's key or value
 	Person(): mName(""), mAge(0) {}
 
 	Person(string name, int age): mName(name), mAge(age) {}
@@ -95,6 +96,7 @@ int main() {
 	// Objects as map values
 
 	map<int, Person> people;
+
 
 	Person("John", 12);
 
