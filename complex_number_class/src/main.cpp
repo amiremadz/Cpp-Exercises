@@ -43,5 +43,19 @@ int main() {
 
 	cout << 1 - c2 << endl;
 
+	if(c1 == c2){
+		cout << "Equals" << endl;
+	}
+	else{
+		cout << "Not equal" << endl;
+	}
+
+	if(c1 != c2){
+		cout << "Not equal" << endl;
+	}
+	else{
+		cout << "Equals" << endl;
+	}
+
 	return 0;
 }
