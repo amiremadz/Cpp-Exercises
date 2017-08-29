@@ -41,5 +41,7 @@ int main() {
 
 	cout << 2.1 + c1 + 3.5 + c2 << endl;
 
+	cout << 1 - c2 << endl;
+
 	return 0;
 }
