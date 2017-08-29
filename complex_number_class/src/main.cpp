@@ -31,7 +31,7 @@ int main() {
 
 	cout << c3 << endl;
 
-	cout << c4.real() << ", " << c4.imag() << endl;
+    cout << endl;
 
 	cout << c1 + c2 + c3 << endl;
 
@@ -42,6 +42,8 @@ int main() {
 	cout << 2.1 + c1 + 3.5 + c2 << endl;
 
 	cout << 1 - c2 << endl;
+
+	cout << endl;
 
 	if(c1 == c2){
 		cout << "Equals" << endl;
@@ -57,6 +59,7 @@ int main() {
 		cout << "Equals" << endl;
 	}
 
+	cout << endl;
 	// Complex conjugate
 	cout << *c1 << endl;
 
