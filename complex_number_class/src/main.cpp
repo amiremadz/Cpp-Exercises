@@ -57,5 +57,8 @@ int main() {
 		cout << "Equals" << endl;
 	}
 
+	// Complex conjugate
+	cout << *c1 << endl;
+
 	return 0;
 }
