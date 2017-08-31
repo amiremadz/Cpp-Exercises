@@ -32,10 +32,7 @@ void show(){
 	cout << T() << endl;
 }
 
-
 int main() {
-
-
 	// Dynamically allocate a temporary string
 	char *string = new char[40];
 
@@ -50,7 +47,7 @@ int main() {
 	delete[] string;
 
 	// Print out our value
-	value.print(); // This will print garbage
+	value.print(); // This will print garbage if template not specialized
 
 	Storage<int> val(5);
 	val.print();
