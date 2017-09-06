@@ -28,7 +28,7 @@ void check(string text, Test &test){
 		cout << "Strings match!" << endl;
 	}
 	else{
-		cout << "Strings do not macth!" << endl;
+		cout << "Strings do not match!" << endl;
 	}
 }
 
@@ -37,7 +37,7 @@ int main() {
 	MatchTest pred;
 	string value = "liond";
 
-	// cannot use literal value here
+	// cannot use literal value here: pass by reference
 	// pred("lion")
 
 	cout << pred(value) << endl;
