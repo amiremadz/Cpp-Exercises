@@ -59,5 +59,14 @@ int main() {
 		cout << val << endl;
 	}
 
+	cout << endl;
+
+	RingBuffer<double> d_ring{2.5, 3.2, 5.4, 6.6};
+	d_ring.add({4.2, 8.3, 7.1});
+
+	for(auto item : d_ring){
+		cout << item << endl;
+	}
+
 	return 0;
 }

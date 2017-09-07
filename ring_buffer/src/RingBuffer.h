@@ -9,6 +9,7 @@
 #define RINGBUFFER_H_
 
 #include <cstring>
+#include <initializer_list>
 
 template<typename T>
 class RingBuffer{
@@ -20,8 +21,19 @@ public:
 	RingBuffer(std::size_t size): mSize(size), mIndex(0){
 		mBuffer = new T[size];
 	}
+
+	RingBuffer(std::initializer_list<T> vec){
+		mSize = vec.size();
+		mIndex = 0;
+		mBuffer = new T[mSize];
+		size_t index = 0;
+		for(auto item : vec){
+			mBuffer[index] = item;
+			index++;
+		}
+	}
 public:
-	// This is not needed if pass by refernce is used in iterator class
+	// This is not needed, if pass by refernce is used in iterator class
 	RingBuffer(const RingBuffer &other){
 		mBuffer = new T[other.mSize];
 		mSize = other.mSize;
@@ -72,6 +84,16 @@ public:
 		}
 		mBuffer[0] = value;
 		*/
+	}
+
+	void add(std::initializer_list<T> values){
+		for(T item : values){
+			mBuffer[mIndex] = item;
+			mIndex++;
+			if(mIndex == mSize){
+				mIndex = 0;
+			}
+		}
 	}
 
 public:
@@ -125,43 +147,6 @@ public:
 
 
 
-
-
-
-
-
-
-
-/*
-template<typename T>
-class RingBuffer<T>::iterator{
-private:
-	size_t mPos;
-	RingBuffer &mRing;
-public:
-	iterator(std::size_t pos, RingBuffer &ring) : mPos(pos), mRing(ring) {}
-public:
-	iterator &operator++(){
-		mPos++;
-		return *this;
-	}
-
-	iterator operator++(int){
-		mPos++;
-		return *this;
-	}
-
-	T &operator*() const {
-		return mRing.mBuffer[mPos];
-	}
-
-	bool operator!=(const iterator &other) const {
-		return mPos != other.mPos;
-	}
-
-};
-
-*/
 
 
 #endif /* RINGBUFFER_H_ */
