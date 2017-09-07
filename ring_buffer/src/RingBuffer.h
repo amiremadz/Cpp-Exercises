@@ -8,6 +8,8 @@
 #ifndef RINGBUFFER_H_
 #define RINGBUFFER_H_
 
+#include <cstring>
+
 template<typename T>
 class RingBuffer{
 private:
@@ -17,6 +19,27 @@ private:
 public:
 	RingBuffer(std::size_t size): mSize(size), mIndex(0){
 		mBuffer = new T[size];
+	}
+public:
+	// This is not needed if pass by refernce is used in iterator class
+	RingBuffer(const RingBuffer &other){
+		mBuffer = new T[other.mSize];
+		mSize = other.mSize;
+		mIndex = other.mIndex;
+
+		/*
+		 * Method 1: memcpy
+		 */
+		std::memcpy(mBuffer, other.mBuffer, other.mSize*sizeof(T));
+		/*
+		 * Method 2: copy one by one
+		 */
+		/*
+		for(std::size_t i=0; i<other.mSize; i++){
+			mBuffer[i] = other.mBuffer[i];
+		}
+		*/
+		std::cout << "copy" << std::endl;
 	}
 public:
 	~RingBuffer(){
@@ -61,8 +84,55 @@ public:
 	iterator end(){
 		return iterator(mSize, *this);
 	}
+
 };
 
+template<typename T>
+class RingBuffer<T>::iterator{
+private:
+	std::size_t mPos;
+	RingBuffer &mRing;		// needed for pass by reference constructor
+	//RingBuffer mRing;		// needed for pass by value constructor
+public:
+	iterator(std::size_t pos, RingBuffer &ring): mPos(pos), mRing(ring)  {} 	// pass by refernce: copy constructor not called
+	//iterator(std::size_t pos, RingBuffer ring): mPos(pos), mRing(ring) {}	 	// pass by value: copy constructor is called
+public:
+	iterator operator++(){
+		mPos++;
+		return *this;
+	}
+	iterator operator++(int){
+		mPos++;
+		return *this;
+	}
+	bool operator!=(const iterator &other) const {
+		return mPos != other.mPos;
+	}
+	T &operator*() const {
+		return mRing.mBuffer[mPos];
+	}
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*
 template<typename T>
 class RingBuffer<T>::iterator{
 private:
@@ -91,7 +161,7 @@ public:
 
 };
 
-
+*/
 
 
 #endif /* RINGBUFFER_H_ */
