@@ -69,5 +69,31 @@ int main() {
 
 	cout << endl;
 
+	// Capture expressions
+
+	int one = 1;
+	int two = 2;
+	int three = 3;
+
+	// capture by value
+	[one, two](){ cout << one << ", " << two << endl; }();
+
+	// capture all local variables by value
+	[=](){ cout << one << ", " << two << endl; }();
+
+	// capture all local variables by value by default, but capture three by reference
+	// This does not work: two is captured by value
+	//[=, &three](){ two = 6; cout << one << ", " << two << endl;}();
+
+	// capture all local variables by value by default, but capture three by reference
+	[=, &three](){ three = 6; cout << one << ", " << two << endl; }();
+	cout << three << endl;
+
+	// capture all local variables by reference
+	[&](){ one = 8; cout << one << ", "<< two << endl; }();
+
+	// capture all local variables by reference by default, but one by value
+	[&, one](){ two = 66; cout << one << ", "<< two << endl; }();
+
 	return 0;
 }
