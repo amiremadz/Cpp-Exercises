@@ -29,6 +29,33 @@ void runDivide( double (*pDivide)(double, double)){
 	cout << pDivide(2.1, 3.2) << endl;
 }
 
+class Test{
+private:
+	int one{1};
+	int two{2};
+public:
+	void run(){
+		int three{3};
+		int four{4};
+
+		// use this to capture instance variables
+		// they are captured by reference
+		// this can be anywhere: auto pLambda = [three, this, four]() {}
+		// does not work: [=, this](){}
+		// does work:     [&, this](){}: capture local variables by
+		// reference, and instance variables
+		auto pLambda = [=](){
+			one = 824;
+			cout << one << endl;
+			cout << two << endl;
+			cout << three << endl;
+			cout << four << endl;
+		};
+		pLambda();
+	}
+};
+
+
 int main() {
 
 	// Basics
@@ -94,6 +121,24 @@ int main() {
 
 	// capture all local variables by reference by default, but one by value
 	[&, one](){ two = 66; cout << one << ", "<< two << endl; }();
+
+	cout << endl;
+
+	// Capturing this with expressions
+
+	Test test;
+	test.run();
+
+	// Mutable
+
+	int dog = 44;
+
+	[dog]() mutable{
+		dog = 55;
+		cout << dog << endl;
+	}();
+	cout << dog << endl;
+
 
 	return 0;
 }
