@@ -8,6 +8,7 @@
 
 #include <iostream>
 #include <memory.h>
+#include <vector>
 
 using namespace std;
 
@@ -86,6 +87,20 @@ int main() {
 
 	//int *pValue2 = &++value; 		// wrong: Rvalue
 	//int *pS = &(7 + value);		// wrong: Rvalue
+
+	// Lvalue References
+
+	vector<Test> vec;
+	vec.push_back(Test());
+
+	Test &rTest1 = mytest;
+	//Test &rTest2 = getTest();		// does not work: mutable Lvalue reference cannot bind to Rvalues
+
+	const Test &rTest3 = getTest(); // works: const Lvalue reference can bind to Rvalues
+
+	Test test2(Test());				// Copy constructor: Test() is Rvalue
+									// input to copy is const Lvalue reference
+
 
 
 	return 0;
