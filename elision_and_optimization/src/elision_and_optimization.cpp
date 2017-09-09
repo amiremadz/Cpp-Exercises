@@ -16,36 +16,50 @@ using namespace std;
 class Test{
 private:
 	static const int kSIZE = 100;
-	int *m_pBuffer;
+	int *m_pBuffer{nullptr};
 public:
 	Test(){
-		cout << "empty constructor" << endl;
+		//cout << "empty constructor" << endl;
 		m_pBuffer = new int[kSIZE]{};  				// or {}
 		//memset(m_pBuffer, 0, kSIZE*sizeof(int));  // from memory library
 
 	}
+
 	Test(int i) : Test(){
 		cout << "parameterized constructor" << endl;
 		for(int i=0; i<kSIZE; i++){
 			m_pBuffer[i] = 7*i;
 		}
 	}
+
 	Test(const Test &other){
-		cout << "copy constructor" << endl;
+		//cout << "copy constructor" << endl;
 		m_pBuffer = new int[kSIZE]{};
 		memcpy(m_pBuffer, other.m_pBuffer, kSIZE*sizeof(int));
 	}
+
+	//*
+	Test(Test &&other){
+		cout << "Move constructor" << endl;
+		m_pBuffer = other.m_pBuffer;
+		other.m_pBuffer = nullptr;
+	}
+	//*/
+
+
 public:
 	Test operator=(const Test &other){
-		cout << "assignment" << endl;
+		//cout << "assignment" << endl;
 		m_pBuffer = new int[kSIZE]{};
 		memcpy(m_pBuffer, other.m_pBuffer, kSIZE*sizeof(int));
 		return *this;
 	}
+
 	friend ostream &operator<<(ostream &out, const Test &test);
+
 public:
 	~Test(){
-		cout << "destructor" << endl;
+		//cout << "destructor" << endl;
 		delete[] m_pBuffer;
 	}
 };
@@ -122,6 +136,10 @@ int main() {
 
 	Test test2(Test());				// Copy constructor: Test() is Rvalue
 									// input to copy is const Lvalue reference
+	int var = 88;
+	int &rVar = var;
+	var = 99;
+	cout << rVar << endl;
 
 	cout << endl;
 
@@ -148,7 +166,21 @@ int main() {
 	check_int(val++);
 	check_int(++val);
 
+	int && rVal = val++;
+	cout << "reference: " << rVal << endl;
+	cout << "value: "<< val << endl;
+
+	val = 16;
+	cout << "value: " << val << endl;
+	cout << "reference: " << rVal << endl;
+
+
 	cout << endl;
+
+	// Move constructor
+
+	vector<Test> vect;
+	vect.push_back(Test());
 
 
 	return 0;
