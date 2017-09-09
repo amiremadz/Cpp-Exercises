@@ -9,6 +9,7 @@
 #include <iostream>
 #include <memory.h>
 #include <vector>
+#include <typeinfo>
 
 using namespace std;
 
@@ -58,6 +59,23 @@ Test getTest(){
 	return Test();
 }
 
+void check(const Test &rTest){
+	cout << "Lvalue reference: Test" << endl;
+}
+
+void check(Test &&rTest){
+	cout << "Rvalue reference: Test" << endl;
+}
+
+
+void check_int(const int &rInt){
+	cout << "Lvalue reference: int" << endl;
+}
+
+void check_int(int &&rInt){
+	cout << "Rvalue reference: int" << endl;
+}
+
 //‑fno‑elide‑constructors
 int main() {
 
@@ -74,6 +92,8 @@ int main() {
 
 	// Rvalues and Lvalues
 
+	cout << endl;
+
 	// Lvalue: anything that you can get the address of
 	int value = 7;
 	int *pValue = &value;
@@ -88,6 +108,8 @@ int main() {
 	//int *pValue2 = &++value; 		// wrong: Rvalue
 	//int *pS = &(7 + value);		// wrong: Rvalue
 
+	cout << endl;
+
 	// Lvalue References
 
 	vector<Test> vec;
@@ -101,6 +123,32 @@ int main() {
 	Test test2(Test());				// Copy constructor: Test() is Rvalue
 									// input to copy is const Lvalue reference
 
+	cout << endl;
+
+	// Rvalue references
+
+	Test &&rMyTest1 = Test();
+	Test &&rMyTest2 = getTest();
+
+	cout << typeid(rMyTest1).name() << endl;
+
+	cout << "*** Lvalue reference:" << endl;
+	check(rTest1);
+	check(rMyTest1);
+	check(rMyTest2);
+
+	cout << "*** Rvalue reference:" << endl;
+	check(Test());
+	check(getTest());
+
+	cout << endl;
+
+	int val = 12;
+
+	check_int(val++);
+	check_int(++val);
+
+	cout << endl;
 
 
 	return 0;
