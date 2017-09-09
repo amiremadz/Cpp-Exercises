@@ -46,6 +46,14 @@ Test getTest(){
 //‑fno‑elide‑constructors
 int main() {
 
+	// without optimization:
+	// constructor: Test()
+	// copy constructor: return->copy to temporary return value
+	// destructur: of Test()
+	// copy constructor: to mytest
+	// destructor: temporary returned object destroyed
+	// print
+	// destructor: of mytest
 	Test mytest = getTest();
 	cout << mytest << endl;
 
