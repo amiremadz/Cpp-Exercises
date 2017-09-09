@@ -71,5 +71,22 @@ int main() {
 	Test mytest = getTest();
 	cout << mytest << endl;
 
+	// Rvalues and Lvalues
+
+	// Lvalue: anything that you can get the address of
+	int value = 7;
+	int *pValue = &value;
+	// int *pVal = &7;     			// wrong: 7 is an Rvalue
+
+	Test *pMytest = &mytest;
+	// Test *pTest = &getTest()   	// wrong: function return value is Rvalue
+
+	int *pValue2 = &++value;
+	cout << *pValue2 << endl;
+
+	//int *pValue2 = &++value; 		// wrong: Rvalue
+	//int *pS = &(7 + value);		// wrong: Rvalue
+
+
 	return 0;
 }
