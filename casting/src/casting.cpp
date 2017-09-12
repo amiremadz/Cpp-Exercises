@@ -71,5 +71,19 @@ int main() {
 		cout << pbb3 << endl; 			// ppb2 = &brother
 	}
 
+	// reinterpret_cast
+
+	Parent *ptr2br = &brother;
+	//Sister *ptr2sis = dynamic_cast<Sister *>(ptr2br); 	// this picks up the mistake
+	//Sister *ptr2sis = static_cast<Sister *>(ptr2br);		// this does not pick up the mistake
+	Sister *ptr2sis = reinterpret_cast<Sister *>(ptr2br);	// this does not pick up the mistake. it does a binary cast of one pointer type to another
+
+	if(ptr2sis == nullptr){
+		cout << "invalid cast" << endl;
+	}
+	else{
+		cout << ptr2sis << endl;
+	}
+
 	return 0;
 }
