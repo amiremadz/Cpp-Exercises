@@ -28,6 +28,7 @@ public:
 		mBuffer = new T[size];
 	}
 
+	// Initializer list
 	Circular(initializer_list<T> list){
 		mSize = list.size();
 		mBuffer = new T[mSize];
@@ -35,6 +36,7 @@ public:
 	}
 
 public:
+	// Copy constructor
 	Circular(const Circular<T> &other){
 		//cout << "copy" << endl;
 		mSize = other.mSize;
@@ -43,8 +45,9 @@ public:
 		memcpy(mBuffer, other.mBuffer, mSize*sizeof(T));
 	}
 
+	// Move constructor
 	Circular(Circular<T> &&other){
-		//cout << "move" << endl;
+		//cout << "move constructor" << endl;
 		mSize = other.mSize;
 		mIndex = other.mIndex;
 		mBuffer = other.mBuffer;
@@ -59,11 +62,23 @@ public:
 		return mBuffer[index];
 	}
 
+	// Copy assignment
 	Circular operator=(const Circular &other){
 		mSize = other.mSize;
 		mIndex = other.mIndex;
 		mBuffer = new T[mSize];
 		memcpy(mBuffer, other.mBuffer, mSize*sizeof(T));
+		return *this;
+	}
+
+	// Move assignment
+	Circular operator=(Circular &&other){
+		cout << "move assignment" << endl;
+		delete[] mBuffer;
+		mSize = other.mSize;
+		mIndex = other.mIndex;
+		mBuffer = other.mBuffer;
+		delete[] other.mBuffer;
 		return *this;
 	}
 
@@ -109,7 +124,6 @@ ostream &operator<<(ostream &out, const Circular<S> &circ_buffer){
 	}
 	return out;
 }
-
 
 template<typename T>
 class Circular<T>::iterator{

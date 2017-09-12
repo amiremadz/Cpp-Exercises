@@ -12,7 +12,9 @@
 
 using namespace std;
 
-
+Circular<int> getCircular(){
+	return Circular<int>();
+}
 
 int main() {
 
@@ -57,6 +59,10 @@ int main() {
 	for(Circular<int>::iterator it=buff.begin(); it != buff.end(); it++){
 		cout << *it << endl;
 	}
+
+	// Move assignment
+	Circular<int> test;
+	test = getCircular();
 
 	return 0;
 }
