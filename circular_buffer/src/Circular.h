@@ -47,7 +47,7 @@ public:
 
 	// Move constructor
 	Circular(Circular<T> &&other){
-		//cout << "move constructor" << endl;
+		cout << "move constructor" << endl;
 		mSize = other.mSize;
 		mIndex = other.mIndex;
 		mBuffer = other.mBuffer;

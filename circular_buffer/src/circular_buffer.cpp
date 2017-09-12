@@ -64,5 +64,8 @@ int main() {
 	Circular<int> test;
 	test = getCircular();
 
+	// Rvalue reference
+	Circular<int> &&pTest = Circular<int>();
+
 	return 0;
 }
