@@ -11,7 +11,8 @@ using namespace std;
 
 class Parent{
 public:
-	void speak(){
+	// if not virtual, dynamic_cast will not work
+	virtual void speak(){
 		cout << "parent!" << endl;
 	}
 
@@ -26,6 +27,8 @@ class Sister : public Parent{
 };
 
 int main() {
+
+	// static_cast
 
 	Parent parent;
 	Brother brother;
@@ -48,6 +51,25 @@ int main() {
 	Parent &&p3 = static_cast<Parent &&>(parent); // Rvalue reference. function with a parameter type that is Rvalue reference
 												  // can use this to pass in a Lvalue
 	p3.speak();
+
+	// dynamic_cast
+
+	// This is ok
+	//Parent *ppb = &brother;
+	//Brother *pbb = static_cast<Brother *>(ppb);
+
+	// what if:
+	Parent *ppb2 = &parent;
+	Brother *pbb2 = static_cast<Brother *>(ppb2);
+
+	Brother *pbb3 = dynamic_cast<Brother *>(ppb2);		// checks types at runtime to make sure make sense
+
+	if(pbb3 == nullptr){
+		cout << "invalid cast" << endl; // ppb2 = &parent
+	}
+	else{
+		cout << pbb3 << endl; 			// ppb2 = &brother
+	}
 
 	return 0;
 }
