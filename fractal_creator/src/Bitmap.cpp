@@ -6,14 +6,26 @@
  */
 
 #include "Bitmap.h"
+#include "BitmapFileHeader.h"
+#include "BitmapInfoHeader.h"
+
+using namespace fractal;
 
 namespace fractal {
 
-Bitmap::Bitmap(int32_t width, int32_t height): mWidth(width), mHeight(height), mPixels(new uint8_t[width*height*3]) {
+Bitmap::Bitmap(int32_t width, int32_t height): mWidth(width), mHeight(height), m_pPixels(new uint8_t[width*height*3]{}) {
 
 }
 
 bool Bitmap::write(string filename){
+	BitmapFileHeader fileHeader;
+	BitmapInfoHeader infoHeader;
+
+	fileHeader.fileSize = sizeof(BitmapFileHeader) + sizeof(BitmapInfoHeader) + mWidth*mHeight*3;
+	fileHeader.dataOffset = sizeof(BitmapFileHeader) + sizeof(BitmapInfoHeader);
+
+	infoHeader.width = mWidth;
+	infoHeader.height = mHeight;
 
 	return false;
 }

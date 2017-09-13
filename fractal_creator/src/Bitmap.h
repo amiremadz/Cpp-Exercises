@@ -20,7 +20,7 @@ class Bitmap {
 private:
 	int32_t mWidth{0};
 	int32_t mHeight{0};
-	unique_ptr<uint8_t[]> mPixels{nullptr};
+	unique_ptr<uint8_t[]> m_pPixels{nullptr};
 
 public:
 	Bitmap(int width, int height);
