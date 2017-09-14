@@ -25,12 +25,26 @@ int main() {
 
 	//image.setPixel(WIDTH/2, HEIGHT/2, 255, 255, 255);
 
+	double min = 9999999;
+	double max = -9999999;
+
 	for(int32_t x=0; x<WIDTH; x++){
 		for(int32_t y=0; y<HEIGHT; y++){
-			image.setPixel(x, y, 255, 0, 0);
+			//image.setPixel(x, y, 255, 0, 0);
+			double xFractal = static_cast<double>(x - WIDTH/2.0)/(WIDTH/2.0);
+			double yFractal = static_cast<double>(y - HEIGHT/2.0)/(HEIGHT/2.0);
+
+			if(yFractal < min){
+				min = yFractal;
+			}
+
+			if(yFractal > max){
+				max = yFractal;
+			}
 		}
 	}
 
+	cout << min << ", " << max << endl;
 
 	bool result = image.write(fileName);
 
