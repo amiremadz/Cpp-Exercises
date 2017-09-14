@@ -28,7 +28,7 @@ public:
 
 public:
 	bool write(string fileName);
-	void setPixel(int32_t x, int32_t y, uint8_t red, uint8_t green, uint8_t blue);
+	void setPixel(int32_t x, int32_t y, uint8_t red, uint8_t green, uint8_t blue); // x=0 at left, y=0 at bottom
 
 public:
 	virtual ~Bitmap();

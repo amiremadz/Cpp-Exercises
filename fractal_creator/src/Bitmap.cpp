@@ -29,7 +29,6 @@ bool Bitmap::write(string fileName){
 	infoHeader.width = mWidth;
 	infoHeader.height = mHeight;
 
-
 	fstream myfile;
 	myfile.open(fileName, fstream::out | fstream::binary);
 
@@ -37,9 +36,9 @@ bool Bitmap::write(string fileName){
 		return false;
 	}
 
-	myfile.write((char*)(&fileHeader), sizeof(fileHeader));
-	myfile.write((char*)(&infoHeader), sizeof(infoHeader));
-	myfile.write((char*)(m_pPixels.get()), mWidth*mHeight*3);			// (char*) m_pPixels.get()
+	myfile.write(reinterpret_cast<char*>(&fileHeader), sizeof(fileHeader));
+	myfile.write(reinterpret_cast<char*>(&infoHeader), sizeof(infoHeader));
+	myfile.write(reinterpret_cast<char*>(m_pPixels.get()), mWidth*mHeight*3);			// (char*) m_pPixels.get()
 
 	myfile.close();
 
@@ -52,7 +51,10 @@ bool Bitmap::write(string fileName){
 
 
 void Bitmap::setPixel(int32_t x, int32_t y, uint8_t red, uint8_t green, uint8_t blue){
-
+	uint8_t *pPixel = m_pPixels.get();
+	pPixel[(3*y)*mWidth + (3*x)] = blue;			// bitmap uses little endian
+	pPixel[(3*y)*mWidth + (3*x) + 1] = green;
+	pPixel[(3*y)*mWidth + (3*x) + 2] = red;
 }
 
 

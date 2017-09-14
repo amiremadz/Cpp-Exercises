@@ -16,9 +16,22 @@ using namespace fractal;
 
 int main() {
 
+	int32_t const WIDTH = 800;
+	int32_t const HEIGHT = 600;
+
 	string fileName = "test.bmp";
 
-	Bitmap image(800, 600);
+	Bitmap image(WIDTH, HEIGHT);
+
+	//image.setPixel(WIDTH/2, HEIGHT/2, 255, 255, 255);
+
+	for(int32_t x=0; x<WIDTH; x++){
+		for(int32_t y=0; y<HEIGHT; y++){
+			image.setPixel(x, y, 255, 0, 0);
+		}
+	}
+
+
 	bool result = image.write(fileName);
 
 	cout << result << endl;
