@@ -1,5 +1,5 @@
 //============================================================================
-// Name        : Fractal.cpp
+// Name        : main.cpp
 // Author      : 
 // Version     :
 // Copyright   : Your copyright notice
@@ -9,15 +9,24 @@
 #include <iostream>
 #include "BitmapFileHeader.h"
 #include "BitmapInfoHeader.h"
+#include "Bitmap.h"
 
 using namespace std;
+using namespace fractal;
 
 int main() {
 
+	string fileName = "test.bmp";
 
-	cout << sizeof(fractal::BitmapFileHeader) << endl;
-	cout << sizeof(fractal::BitmapInfoHeader) << endl;
+	Bitmap image(800, 600);
+	bool result = image.write(fileName);
 
+	cout << result << endl;
+
+	cout << sizeof(BitmapFileHeader) << endl;
+	cout << sizeof(BitmapInfoHeader) << endl;
+
+	cout << "Finished!" << endl;
 
 	return 0;
 }

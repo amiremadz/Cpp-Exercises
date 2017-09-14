@@ -11,8 +11,8 @@
 #include <cstdint>
 using namespace std;
 
-#pragma pack(2);					// no padding in struct
-
+// no padding in struct
+#pragma pack(2)
 
 namespace fractal{
 

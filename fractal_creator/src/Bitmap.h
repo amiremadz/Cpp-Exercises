@@ -11,6 +11,7 @@
 #include <cstdint>
 #include <string>
 #include <memory>
+#include <fstream> // if this is in Bitmap.cpp, it causes a crash!
 
 using namespace std;
 
@@ -23,12 +24,11 @@ private:
 	unique_ptr<uint8_t[]> m_pPixels{nullptr};
 
 public:
-	Bitmap(int width, int height);
+	Bitmap(int32_t width, int32_t height);
 
 public:
-	bool write(string filename);
+	bool write(string fileName);
 	void setPixel(int32_t x, int32_t y, uint8_t red, uint8_t green, uint8_t blue);
-
 
 public:
 	virtual ~Bitmap();

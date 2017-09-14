@@ -13,7 +13,6 @@
 
 #pragma pack(2)
 
-
 namespace fractal{
 
 struct BitmapInfoHeader{
