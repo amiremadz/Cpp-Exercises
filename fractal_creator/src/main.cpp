@@ -20,8 +20,8 @@ int main() {
 	int32_t const WIDTH = 800;
 	int32_t const HEIGHT = 600;
 
-	int32_t min = INT32_MAX;
-	int32_t max = INT32_MIN;
+	double min = INT32_MAX;
+	double max = INT32_MIN;
 
 	string fileName = "test.bmp";
 
@@ -32,25 +32,28 @@ int main() {
 	for(int32_t x=0; x<WIDTH; x++){
 		for(int32_t y=0; y<HEIGHT; y++){
 			//image.setPixel(x, y, 255, 0, 0);
-			cout << "x: " << x << " y: " << y << endl;
 
-			double xFractal = static_cast<double>(x - WIDTH/2.0)/(WIDTH/2.0);
+			double xFractal = static_cast<double>(x - WIDTH/2.0 - 200)/(HEIGHT/2.0);
 			double yFractal = static_cast<double>(y - HEIGHT/2.0)/(HEIGHT/2.0);
 
 			uint32_t iterations = Mandelbrot::getIterations(xFractal, yFractal);
 
+			cout << "x: " << x << " y: " << y << " iterations: " << iterations << endl;
+
 			// map to a color
-			uint8_t red = static_cast<uint8_t>(256*static_cast<double>(iterations)/Mandelbrot::MAX_ITERATIONS);
+			uint8_t color = static_cast<uint8_t>(256*static_cast<double>(iterations)/Mandelbrot::MAX_ITERATIONS);
 
-			if(red < min){
-				min = red;
+			color = color * color * color;
+
+			if(xFractal < min){
+				min = xFractal;
 			}
 
-			if(red > max){
-				max = red;
+			if(xFractal > max){
+				max = xFractal;
 			}
 
-			image.setPixel(x, y, red, red, red);
+			image.setPixel(x, y, 0, color, 0);
 		}
 	}
 
