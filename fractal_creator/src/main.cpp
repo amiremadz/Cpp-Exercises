@@ -61,11 +61,15 @@ int main() {
 		}
 	}
 
-	cout << "min: " << min << " max: " << max << endl;
-
-	for(uint32_t i = 0; i<Mandelbrot::MAX_ITERATIONS; i++){
-		cout << "itteration: " << i << " count: " << histogram[i] << endl;
+	uint32_t sum = 0;
+	for(uint32_t i = 0; i<Mandelbrot::MAX_ITERATIONS+1; i++){
+		sum += histogram[i];
+		cout << histogram[i] << " " << flush;
 	}
+
+	cout << endl;
+	cout << "min: " << min << " max: " << max << endl;
+	cout << "sum: " << sum << " expected: " << WIDTH*HEIGHT<< endl;
 
 	bool result = image.write(fileName);
 
