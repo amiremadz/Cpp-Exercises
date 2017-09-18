@@ -27,7 +27,7 @@ int main() {
 
 	Bitmap image(WIDTH, HEIGHT);
 
-	unique_ptr<uint32_t[]> histogram(new uint32_t[Mandelbrot::MAX_ITERATIONS + 1]{});
+	unique_ptr<uint32_t[]> histogram(new uint32_t[Mandelbrot::MAX_ITERATIONS]{});
 
 	//image.setPixel(WIDTH/2, HEIGHT/2, 255, 255, 255);
 
@@ -40,7 +40,9 @@ int main() {
 
 			uint32_t iterations = Mandelbrot::getIterations(xFractal, yFractal);
 
-			histogram[iterations]++;
+			if(iterations < Mandelbrot::MAX_ITERATIONS){
+				histogram[iterations]++;
+			}
 
 			cout << "x: " << x << " y: " << y << " iterations: " << iterations << endl;
 
@@ -62,7 +64,7 @@ int main() {
 	}
 
 	uint32_t sum = 0;
-	for(uint32_t i = 0; i<Mandelbrot::MAX_ITERATIONS+1; i++){
+	for(uint32_t i = 0; i < Mandelbrot::MAX_ITERATIONS; i++){
 		sum += histogram[i];
 		cout << histogram[i] << " " << flush;
 	}
