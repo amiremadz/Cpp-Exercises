@@ -47,23 +47,33 @@ int main() {
 			}
 
 			cout << "x: " << x << " y: " << y << " iterations: " << iterations << endl;
-
-			// map to a color
-			uint8_t color = static_cast<uint8_t>(256*static_cast<double>(iterations)/Mandelbrot::MAX_ITERATIONS);
-
-			color = color * color * color;
-
-			if(xFractal < min){
-				min = xFractal;
-			}
-
-			if(xFractal > max){
-				max = xFractal;
-			}
-
-			image.setPixel(x, y, 0, color, 0);
 		}
 	}
+
+	uint32_t total = 0;
+	for(uint32_t i = 0; i < Mandelbrot::MAX_ITERATIONS; i++){
+		total += histogram[i];
+	}
+
+	for(int32_t x=0; x<WIDTH; x++){
+			for(int32_t y=0; y<HEIGHT; y++){
+
+				uint32_t iterations = fractal[y*WIDTH + x];
+
+				double hue = 0.0;
+
+				for(uint32_t i = 0; i <= iterations; i++){
+					hue += static_cast<double>(histogram[i])/total;
+				}
+
+				uint8_t red = 0;
+				uint8_t green = hue*255;
+				uint8_t blue = 0;
+
+				image.setPixel(x, y, red, green, blue);
+			}
+	}
+
 
 #if 0
 	uint32_t sum = 0;
