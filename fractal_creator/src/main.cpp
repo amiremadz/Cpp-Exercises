@@ -7,6 +7,7 @@
 //============================================================================
 
 #include <iostream>
+#include <cmath>
 #include "BitmapFileHeader.h"
 #include "BitmapInfoHeader.h"
 #include "Bitmap.h"
@@ -46,7 +47,7 @@ int main() {
 				histogram[iterations]++;
 			}
 
-			cout << "x: " << x << " y: " << y << " iterations: " << iterations << endl;
+			//cout << "x: " << x << " y: " << y << " iterations: " << iterations << endl;
 		}
 	}
 
@@ -58,19 +59,27 @@ int main() {
 	for(int32_t x=0; x<WIDTH; x++){
 			for(int32_t y=0; y<HEIGHT; y++){
 
-				uint32_t iterations = fractal[y*WIDTH + x];
-
-				double hue = 0.0;
-
-				for(uint32_t i = 0; i <= iterations; i++){
-					hue += static_cast<double>(histogram[i])/total;
-				}
-
 				uint8_t red = 0;
-				uint8_t green = hue*255;
+				uint8_t green = 0;
 				uint8_t blue = 0;
 
-				image.setPixel(x, y, red, green, blue);
+				uint32_t iterations = fractal[y*WIDTH + x];
+
+				if(iterations != Mandelbrot::MAX_ITERATIONS){
+					double hue = 0.0;
+
+					for(uint32_t i = 0; i <= iterations; i++){
+						hue += static_cast<double>(histogram[i])/total;
+					}
+
+					if (hue > .95) {
+						cout << "x: " << x << " y: " << y << " hue: " << hue << endl;
+					}
+
+					green = pow(255, hue);
+
+					image.setPixel(x, y, red, green, blue);
+				}
 			}
 	}
 
