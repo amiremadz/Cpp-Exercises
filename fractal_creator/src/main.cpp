@@ -12,7 +12,7 @@
 #include "BitmapInfoHeader.h"
 #include "Bitmap.h"
 #include "Mandelbrot.h"
-#include "Zoom.h"
+#include "ZoomList.h"
 
 using namespace std;
 using namespace fractal;

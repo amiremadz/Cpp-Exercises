@@ -10,6 +10,7 @@
 
 using namespace std;
 
+
 namespace fractal {
 
 Mandelbrot::Mandelbrot() {
@@ -20,7 +21,6 @@ Mandelbrot::Mandelbrot() {
 Mandelbrot::~Mandelbrot() {
 	// TODO Auto-generated destructor stub
 }
-
 
 
 uint32_t Mandelbrot::getIterations(double x, double y){
@@ -43,12 +43,6 @@ uint32_t Mandelbrot::getIterations(double x, double y){
 	return iterations;
 
 }
-
-
-
-
-
-
 
 
 

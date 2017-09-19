@@ -8,15 +8,21 @@
 #ifndef ZOOM_H_
 #define ZOOM_H_
 
+#include <cstdint>
+
+
 namespace fractal {
 
+
+
 struct Zoom {
-	int x{0};
-	int y{0};
+	uint32_t x{0};			// zoom center x value
+	uint32_t y{0};			// zoom center y value
 	double scale{0.0};
 
-	Zoom(int x, int y, double scale) : x(x), y(y), scale(scale) { }
+	Zoom(uint32_t x, uint32_t y, double scale) : x(x), y(y), scale(scale) { }
 };
+
 
 } /* namespace fractal */
 

@@ -10,7 +10,9 @@
 
 #include <cstdint>
 
+
 namespace fractal {
+
 
 class Mandelbrot {
 public:
@@ -25,6 +27,7 @@ public:
 public:
 	virtual ~Mandelbrot();
 };
+
 
 } /* namespace fractal */
 
