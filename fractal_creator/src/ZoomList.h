@@ -17,11 +17,17 @@
 
 namespace fractal {
 
+
 class ZoomList {
 private:
-	uint32_t mWidth{0};
-	uint32_t mHeight{0};
-	std::vector<Zoom> mList{};
+	double mXcenter{0.0};		// overall zoom center x
+ 	double mYcenter{0.0};		// overall zoom center y
+	double mScale{1.0};			// overall zoom scale
+
+	uint32_t mWidth{0};			// width of the screen
+	uint32_t mHeight{0};		// height of the screen
+
+	std::vector<Zoom> mList{};	// list of all zooms
 
 public:
 	ZoomList(uint32_t width, uint32_t height);
@@ -33,6 +39,12 @@ public:
 
 };
 
+
+
+
 } /* namespace fractal */
+
+
+
 
 #endif /* ZOOMLIST_H_ */

@@ -29,6 +29,11 @@ int main() {
 
 	Bitmap image(WIDTH, HEIGHT);
 
+	ZoomList zoomList(WIDTH, HEIGHT);
+
+	zoomList.add(Zoom(WIDTH/2, HEIGHT/2, 1));
+
+
 	unique_ptr<uint32_t[]> histogram(new uint32_t[Mandelbrot::MAX_ITERATIONS]{});
 	unique_ptr<uint32_t[]> fractal(new uint32_t[WIDTH*HEIGHT]{});
 	//image.setPixel(WIDTH/2, HEIGHT/2, 255, 255, 255);
@@ -37,8 +42,12 @@ int main() {
 		for(int32_t y=0; y<HEIGHT; y++){
 			//image.setPixel(x, y, 255, 0, 0);
 
-			double xFractal = static_cast<double>(x - WIDTH/2.0 - 200)/(HEIGHT/2.0);
-			double yFractal = static_cast<double>(y - HEIGHT/2.0)/(HEIGHT/2.0);
+			//double xFractal = static_cast<double>(x - WIDTH/2.0 - 200)/(HEIGHT/2.0);
+			//double yFractal = static_cast<double>(y - HEIGHT/2.0)/(HEIGHT/2.0);
+
+			pair<double, double> coordinates = zoomList.doZoom(x, y);
+			double xFractal = coordinates.first;
+			double yFractal = coordinates.second;
 
 			uint32_t iterations = Mandelbrot::getIterations(xFractal, yFractal);
 

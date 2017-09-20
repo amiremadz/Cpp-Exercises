@@ -18,7 +18,7 @@ namespace fractal {
 struct Zoom {
 	uint32_t x{0};			// zoom center x value
 	uint32_t y{0};			// zoom center y value
-	double scale{0.0};
+	double scale{1.0};
 
 	Zoom(uint32_t x, uint32_t y, double scale) : x(x), y(y), scale(scale) { }
 };
