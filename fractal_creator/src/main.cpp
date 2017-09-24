@@ -31,9 +31,9 @@ int main() {
 
 	ZoomList zoomList(WIDTH, HEIGHT);
 
-	zoomList.add(Zoom(WIDTH/2, HEIGHT/2, 2.0/WIDTH));
-	zoomList.add(Zoom(531, HEIGHT-71, 4.0/WIDTH));
-	zoomList.add(Zoom(529, HEIGHT-211, 4.0/WIDTH));
+	zoomList.add(Zoom(WIDTH/2, HEIGHT/2, 4.0/WIDTH));
+	zoomList.add(Zoom(295, HEIGHT-202, 0.1));
+	zoomList.add(Zoom(312, HEIGHT-304, 4.0/WIDTH));
 
 
 	unique_ptr<uint32_t[]> histogram(new uint32_t[Mandelbrot::MAX_ITERATIONS]{});
@@ -53,7 +53,7 @@ int main() {
 			if(iterations < Mandelbrot::MAX_ITERATIONS){
 				histogram[iterations]++;
 			}
-			cout << "x: " << x << " y: " << y << " iterations: " << iterations << endl;
+			//cout << "x: " << x << " y: " << y << " iterations: " << iterations << endl;
 		}
 	}
 
@@ -80,10 +80,12 @@ int main() {
 					hue += static_cast<double>(histogram[i]) / total;
 				}
 
+				/*
 				if (hue > .95) {
 					cout << "x: " << x << " y: " << y << " hue: " << hue
 							<< endl;
 				}
+				*/
 
 				green = pow(255, hue);
 

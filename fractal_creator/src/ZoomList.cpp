@@ -15,20 +15,17 @@ using namespace std;
 namespace fractal {
 
 
-ZoomList::ZoomList(uint32_t width, uint32_t height): mWidth(width), mHeight(height) {
-
-}
+ZoomList::ZoomList(uint32_t width, uint32_t height): mWidth(width), mHeight(height) { }
 
 
 void ZoomList::add(const Zoom &zoom){
 	mList.push_back(zoom);
-	mXcenter += (zoom.x - mWidth/2)*mScale;
-	mYcenter += (zoom.y - mHeight/2)*mScale;
+	mXcenter += (zoom.x - mWidth/2.0)*mScale;   //  numerical issues if 2 vs 2.0
+	mYcenter += (zoom.y - mHeight/2.0)*mScale;
 	mScale *= zoom.scale;
 
 	cout << mXcenter << ", " << mYcenter << ", " << mScale << endl;
 }
-
 
 std::pair<double, double> ZoomList::doZoom(uint32_t x, uint32_t y){
 
