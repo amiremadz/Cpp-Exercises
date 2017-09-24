@@ -13,6 +13,7 @@
 #include "Bitmap.h"
 #include "Mandelbrot.h"
 #include "ZoomList.h"
+#include "FractalCreator.h"
 
 using namespace std;
 using namespace fractal;
@@ -21,11 +22,16 @@ int main() {
 
 	int32_t const WIDTH = 800;
 	int32_t const HEIGHT = 600;
+	string fileName = "test.bmp";
+
+	FractalCreator myFractal(WIDTH, HEIGHT);
+	myFractal.addZoom(Zoom(WIDTH/2, HEIGHT/2, 4.0/WIDTH));
+	myFractal.drawFractal();
+	myFractal.writeBitmap(fileName);
+
 
 	double min = INT32_MAX;
 	double max = INT32_MIN;
-
-	string fileName = "test.bmp";
 
 	Bitmap image(WIDTH, HEIGHT);
 
@@ -53,6 +59,7 @@ int main() {
 			if(iterations < Mandelbrot::MAX_ITERATIONS){
 				histogram[iterations]++;
 			}
+
 			//cout << "x: " << x << " y: " << y << " iterations: " << iterations << endl;
 		}
 	}
@@ -79,13 +86,6 @@ int main() {
 				for (uint32_t i = 0; i <= iterations; i++) {
 					hue += static_cast<double>(histogram[i]) / total;
 				}
-
-				/*
-				if (hue > .95) {
-					cout << "x: " << x << " y: " << y << " hue: " << hue
-							<< endl;
-				}
-				*/
 
 				green = pow(255, hue);
 
