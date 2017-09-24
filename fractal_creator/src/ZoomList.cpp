@@ -31,7 +31,14 @@ void ZoomList::add(const Zoom &zoom){
 
 
 std::pair<double, double> ZoomList::doZoom(uint32_t x, uint32_t y){
-	return std::pair<double, double>(mXcenter, mYcenter);
+
+	double xFractal;
+	double yFractal;
+
+	xFractal =  static_cast<double>(x - mWidth/2.0)*mScale + mXcenter;
+	yFractal =  static_cast<double>(y - mHeight/2.0)*mScale + mYcenter;
+
+	return std::pair<double, double>(xFractal, yFractal);
 }
 
 

@@ -31,20 +31,16 @@ int main() {
 
 	ZoomList zoomList(WIDTH, HEIGHT);
 
-	zoomList.add(Zoom(WIDTH/2, HEIGHT/2, 1));
+	zoomList.add(Zoom(WIDTH/2, HEIGHT/2, 2.0/WIDTH));
+	zoomList.add(Zoom(531, HEIGHT-71, 4.0/WIDTH));
+	zoomList.add(Zoom(529, HEIGHT-211, 4.0/WIDTH));
 
 
 	unique_ptr<uint32_t[]> histogram(new uint32_t[Mandelbrot::MAX_ITERATIONS]{});
 	unique_ptr<uint32_t[]> fractal(new uint32_t[WIDTH*HEIGHT]{});
-	//image.setPixel(WIDTH/2, HEIGHT/2, 255, 255, 255);
 
 	for(int32_t x=0; x<WIDTH; x++){
 		for(int32_t y=0; y<HEIGHT; y++){
-			//image.setPixel(x, y, 255, 0, 0);
-
-			//double xFractal = static_cast<double>(x - WIDTH/2.0 - 200)/(HEIGHT/2.0);
-			//double yFractal = static_cast<double>(y - HEIGHT/2.0)/(HEIGHT/2.0);
-
 			pair<double, double> coordinates = zoomList.doZoom(x, y);
 			double xFractal = coordinates.first;
 			double yFractal = coordinates.second;
@@ -53,11 +49,11 @@ int main() {
 
 			fractal[y*WIDTH + x] = iterations;
 
+			// exclude MAX_ITERATIONS: to make the histogram smooth
 			if(iterations < Mandelbrot::MAX_ITERATIONS){
 				histogram[iterations]++;
 			}
-
-			//cout << "x: " << x << " y: " << y << " iterations: " << iterations << endl;
+			cout << "x: " << x << " y: " << y << " iterations: " << iterations << endl;
 		}
 	}
 
@@ -67,31 +63,35 @@ int main() {
 	}
 
 	for(int32_t x=0; x<WIDTH; x++){
-			for(int32_t y=0; y<HEIGHT; y++){
+		for (int32_t y = 0; y < HEIGHT; y++) {
 
-				uint8_t red = 0;
-				uint8_t green = 0;
-				uint8_t blue = 0;
+			uint8_t red = 0;
+			uint8_t green = 0;
+			uint8_t blue = 0;
 
-				uint32_t iterations = fractal[y*WIDTH + x];
+			uint32_t iterations = fractal[y * WIDTH + x];
 
-				if(iterations != Mandelbrot::MAX_ITERATIONS){
-					double hue = 0.0;
+			// Points which do not diverge: Black
+			// Points which diverge: Colorful
+			if (iterations != Mandelbrot::MAX_ITERATIONS) {
+				double hue = 0.0;
 
-					for(uint32_t i = 0; i <= iterations; i++){
-						hue += static_cast<double>(histogram[i])/total;
-					}
-
-					if (hue > .95) {
-						cout << "x: " << x << " y: " << y << " hue: " << hue << endl;
-					}
-
-					green = pow(255, hue);
-
-					image.setPixel(x, y, red, green, blue);
+				for (uint32_t i = 0; i <= iterations; i++) {
+					hue += static_cast<double>(histogram[i]) / total;
 				}
+
+				if (hue > .95) {
+					cout << "x: " << x << " y: " << y << " hue: " << hue
+							<< endl;
+				}
+
+				green = pow(255, hue);
+
+				image.setPixel(x, y, red, green, blue);
 			}
+		}
 	}
+	//*/
 
 
 #if 0

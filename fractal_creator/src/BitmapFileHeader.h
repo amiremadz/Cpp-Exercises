@@ -17,7 +17,7 @@ using namespace std;
 namespace fractal{
 
 struct BitmapFileHeader{
-	char header[2]{'B', 'M'};		// used to adentify BMP file
+	char header[2]{'B', 'M'};		// used to identify BMP file
 	int32_t fileSize;				// has to be 32 bits
 	int32_t reserved{0};
 	int32_t dataOffset;
