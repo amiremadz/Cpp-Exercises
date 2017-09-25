@@ -8,11 +8,18 @@
 
 #include <iostream>
 #include "FractalCreator.h"
+#include "RGB.h"
 
 using namespace std;
 using namespace fractal;
 
 int main() {
+
+	RGB rgb1(1, 8, 3);
+	RGB rgb2(4, 5, 6);
+	RGB rgb3 = rgb1 - rgb2;
+
+	cout << rgb3 << endl;
 
 	int32_t const WIDTH = 800;
 	int32_t const HEIGHT = 600;
@@ -20,12 +27,7 @@ int main() {
 
 	FractalCreator myFractal(WIDTH, HEIGHT);
 
-	myFractal.addZoom(Zoom(295, HEIGHT - 202, 0.1));
-	myFractal.addZoom(Zoom(312, HEIGHT - 304, 0.1));
-
-	myFractal.calculateIterations();
-	myFractal.drawFractal();
-	myFractal.writeBitmap(fileName);
+	//myFractal.run(fileName);
 
 	cout << "Finished!" << endl;
 

@@ -40,16 +40,15 @@ public:
 private:
 	void calculateTotalIterations();
 
-public:
+private:
 	void calculateIterations();
-
 	void drawFractal();
-
 	void addZoom(const Zoom &zoom);
-
 	void writeBitmap(string name);
 
-	virtual ~FractalCreator();
+public:
+	void run(string name);
+
 };
 
 } /* namespace fractal */

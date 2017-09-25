@@ -14,6 +14,18 @@
 
 namespace fractal {
 
+
+
+void FractalCreator::run(string name){
+
+	addZoom(Zoom(295, mHeight - 202, 0.1));
+	addZoom(Zoom(312, mHeight - 304, 0.1));
+
+	calculateIterations();
+	drawFractal();
+	writeBitmap(name);
+}
+
 FractalCreator::FractalCreator(uint32_t width, uint32_t height) : mWidth(width), mHeight(height), mZoomList(width, height),
 		mHistogram(new uint32_t[Mandelbrot::MAX_ITERATIONS]{ }), mFractal(new uint32_t[width * height] { }),  mImage(width, height){
 	mZoomList.add(Zoom(width/2.0, height/2.0, 4.0/width));
@@ -93,9 +105,5 @@ void FractalCreator::writeBitmap(string name){
 
 
 
-
-FractalCreator::~FractalCreator() {
-	// TODO Auto-generated destructor stub
-}
 
 } /* namespace fractal */
