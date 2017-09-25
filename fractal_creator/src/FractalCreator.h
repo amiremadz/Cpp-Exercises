@@ -15,6 +15,7 @@
 #include "ZoomList.h"
 #include "Mandelbrot.h"
 #include "Bitmap.h"
+#include "RGB.h"
 
 using namespace std;
 
@@ -43,10 +44,10 @@ private:
 private:
 	void calculateIterations();
 	void drawFractal();
-	void addZoom(const Zoom &zoom);
 	void writeBitmap(string name);
 
 public:
+	void addZoom(const Zoom &zoom);
 	void run(string name);
 
 };

@@ -19,7 +19,7 @@ ZoomList::ZoomList(uint32_t width, uint32_t height): mWidth(width), mHeight(heig
 void ZoomList::add(const Zoom &zoom){
 	mList.push_back(zoom);
 	mXcenter += (zoom.x - mWidth/2.0)*mScale;   //  numerical issues if 2 vs 2.0
-	mYcenter += (zoom.y - mHeight/2.0)*mScale;
+	mYcenter += (mHeight - zoom.y - mHeight/2.0)*mScale;	// first mHeight takes care of bitmap reverse y coordinate
 	mScale *= zoom.scale;
 
 	//cout << mXcenter << ", " << mYcenter << ", " << mScale << endl;

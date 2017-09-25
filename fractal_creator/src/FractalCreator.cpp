@@ -17,10 +17,6 @@ namespace fractal {
 
 
 void FractalCreator::run(string name){
-
-	addZoom(Zoom(295, mHeight - 202, 0.1));
-	addZoom(Zoom(312, mHeight - 304, 0.1));
-
 	calculateIterations();
 	drawFractal();
 	writeBitmap(name);
@@ -62,6 +58,10 @@ void FractalCreator::drawFractal(){
 
 	calculateTotalIterations();
 
+	RGB startColor(0, 0, 20);
+	RGB endColor(255, 128, 86);
+	RGB colorDiff = endColor - startColor;
+
 	for (uint32_t x = 0; x < mWidth; x++) {
 		for (uint32_t y = 0; y < mHeight; y++) {
 			uint8_t red = 0;
@@ -79,8 +79,9 @@ void FractalCreator::drawFractal(){
 					hue += static_cast<double>(mHistogram[i]) / mTotal;
 				}
 
-				//green = pow(255, hue);
-				green = hue * 255;
+				red = startColor.red + colorDiff.red*hue;
+				green = startColor.green + colorDiff.green*hue;
+				blue = startColor.blue + colorDiff.blue*hue;
 
 				mImage.setPixel(x, y, red, green, blue);
 			}

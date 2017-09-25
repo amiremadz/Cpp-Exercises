@@ -15,19 +15,16 @@ using namespace fractal;
 
 int main() {
 
-	RGB rgb1(1, 8, 3);
-	RGB rgb2(4, 5, 6);
-	RGB rgb3 = rgb1 - rgb2;
-
-	cout << rgb3 << endl;
-
 	int32_t const WIDTH = 800;
 	int32_t const HEIGHT = 600;
 	string fileName = "test.bmp";
 
 	FractalCreator myFractal(WIDTH, HEIGHT);
 
-	//myFractal.run(fileName);
+	myFractal.addZoom(Zoom(295, 202, 0.1));
+	myFractal.addZoom(Zoom(312, 304, 0.1));
+
+	myFractal.run(fileName);
 
 	cout << "Finished!" << endl;
 
