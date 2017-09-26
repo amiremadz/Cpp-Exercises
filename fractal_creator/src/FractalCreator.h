@@ -11,6 +11,7 @@
 #include <cstdint>
 #include <string>
 #include <memory>
+#include <vector>
 #include "Zoom.h"
 #include "ZoomList.h"
 #include "Mandelbrot.h"
@@ -33,21 +34,30 @@ private:
 
 	Bitmap mImage;
 
-	uint32_t mTotal{0};
+	uint32_t mTotalPixels{0};
+
+	vector<uint32_t> mRanges;
+	vector<RGB>	mColors;
+	vector<uint32_t> mRangeTotalPixels;
+
+	bool mGotFirstRange{false};
 
 public:
 	FractalCreator(uint32_t width, uint32_t height);
 
 private:
-	void calculateTotalIterations();
-
-private:
 	void calculateIterations();
 	void drawFractal();
 	void writeBitmap(string name);
+	void calculateTotalPixels();
+
+	void calculateRangeTotalPixels();
+
+	bool rangesMakeSense();
 
 public:
 	void addZoom(const Zoom &zoom);
+	void addRange(double rangeEnd, const RGB &rgb);
 	void run(string name);
 
 };

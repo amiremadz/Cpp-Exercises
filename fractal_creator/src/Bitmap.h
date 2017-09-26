@@ -24,8 +24,6 @@ private:
 	unique_ptr<uint8_t[]> m_pPixels{nullptr};
 
 public:
-	//Bitmap() = default;
-
 	Bitmap(int32_t width, int32_t height);
 
 public:
