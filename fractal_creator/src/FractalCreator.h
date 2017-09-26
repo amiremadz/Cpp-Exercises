@@ -38,7 +38,7 @@ private:
 
 	vector<uint32_t> mRanges;
 	vector<RGB>	mColors;
-	vector<uint32_t> mRangeTotalPixels;
+	vector<uint32_t> mRangeTotalPixels;			// length = total # of addRanges - 1 (addrange(0) does not count)
 
 	bool mGotFirstRange{false};
 
@@ -55,7 +55,7 @@ private:
 
 	bool rangesMakeSense();
 
-	int32_t getRangeIndex(uint32_t iterations) const;
+	uint32_t getRangeIndex(uint32_t iterations) const;	// starts from index 0
 
 public:
 	void addZoom(const Zoom &zoom);

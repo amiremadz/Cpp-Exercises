@@ -103,12 +103,8 @@ void FractalCreator::calculateIterations(){
 	}
 }
 
-int32_t FractalCreator::getRangeIndex(uint32_t iterations) const{
+uint32_t FractalCreator::getRangeIndex(uint32_t iterations) const{
 	uint32_t index = 0;
-
-	if(iterations >= Mandelbrot::MAX_ITERATIONS){
-		return -1;
-	}
 
 	for(auto value : mRanges){
 		if(iterations < value){
@@ -122,7 +118,7 @@ int32_t FractalCreator::getRangeIndex(uint32_t iterations) const{
 	assert(index >= 0);
 	assert(index < mRanges.size());
 
-	return static_cast<int32_t>(index);
+	return index;
 }
 
 void FractalCreator::calculateRangeTotalPixels(){
@@ -156,26 +152,38 @@ void FractalCreator::calculateTotalPixels(){
 
 void FractalCreator::drawFractal(){
 
-	RGB startColor(0, 0, 0);
-	RGB endColor(0, 0, 255);
-	RGB colorDiff = endColor - startColor;
+	//RGB startColor(0, 0, 0);
+	//RGB endColor(0, 0, 255);
+	//RGB colorDiff = endColor - startColor;
 
 	for (uint32_t x = 0; x < mWidth; x++) {
 		for (uint32_t y = 0; y < mHeight; y++) {
+
+			uint32_t iterations = mFractal[y * mWidth + x];
+
+			uint32_t rangeIndex = getRangeIndex(iterations);
+			uint32_t rangeTotalPixels = mRangeTotalPixels[rangeIndex];
+			uint32_t rangeStart = mRanges[rangeIndex];
+
+			RGB &startColor = mColors[rangeIndex];
+			RGB &endColor = mColors[rangeIndex+1];
+			RGB colorDiff = endColor - startColor;
+
 			uint8_t red = 0;
 			uint8_t green = 0;
 			uint8_t blue = 0;
 
-			uint32_t iterations = mFractal[y * mWidth + x];
-
 			// Points which do not diverge: Black
 			// Points which diverge: Colorful
 			if (iterations != Mandelbrot::MAX_ITERATIONS) {
-				double hue = 0.0;
 
-				for (uint32_t i = 0; i <= iterations; i++) {
-					hue += static_cast<double>(mHistogram[i]) / mTotalPixels;
+				uint32_t totalPixels = 0;
+
+				for (uint32_t i = rangeStart; i <= iterations; i++) {
+					totalPixels += mHistogram[i];
 				}
+
+				double hue = static_cast<double>(totalPixels)/rangeTotalPixels;
 
 				red = startColor.red + colorDiff.red*hue;
 				green = startColor.green + colorDiff.green*hue;
