@@ -54,6 +54,8 @@ private:
 	void calculateRangeTotalPixels();
 
 	bool rangesMakeSense();
+public:
+	int32_t getRangeIndex(uint32_t iterations) const;
 
 public:
 	void addZoom(const Zoom &zoom);

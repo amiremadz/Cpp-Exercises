@@ -10,6 +10,7 @@
 #include "BitmapInfoHeader.h"
 #include <cmath>
 #include <iostream>
+#include <cassert>
 
 
 namespace fractal {
@@ -100,6 +101,28 @@ void FractalCreator::calculateIterations(){
 			}
 		}
 	}
+}
+
+int32_t FractalCreator::getRangeIndex(uint32_t iterations) const{
+	uint32_t index = 0;
+
+	if(iterations >= Mandelbrot::MAX_ITERATIONS){
+		return -1;
+	}
+
+	for(auto value : mRanges){
+		if(iterations < value){
+			break;
+		}
+		index++;
+	}
+
+	index--;
+
+	assert(index >= 0);
+	assert(index < mRanges.size());
+
+	return static_cast<int32_t>(index);
 }
 
 void FractalCreator::calculateRangeTotalPixels(){
