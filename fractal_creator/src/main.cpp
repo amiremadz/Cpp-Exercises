@@ -19,8 +19,6 @@ int main() {
 	int32_t const HEIGHT = 600;
 	string fileName = "test.bmp";
 
-
-
 	FractalCreator myFractal(WIDTH, HEIGHT);
 
 	myFractal.addRange(0.0, RGB(0, 0, 0));
@@ -28,13 +26,7 @@ int main() {
 	myFractal.addRange(0.5, RGB(255, 255, 0));
 	myFractal.addRange(1.0, RGB(255, 255, 255));
 
-	cout << myFractal.getRangeIndex(0) << endl;
-	cout << myFractal.getRangeIndex(100) << endl;
-	cout << myFractal.getRangeIndex(999) << endl;
-
-
-
-#if 0
+#if 1
 
 	myFractal.addZoom(Zoom(295, 202, 0.1));
 	myFractal.addZoom(Zoom(312, 304, 0.1));
