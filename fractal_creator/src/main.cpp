@@ -23,17 +23,13 @@ int main() {
 
 	myFractal.addRange(0.0, RGB(0, 0, 0));
 	myFractal.addRange(0.3, RGB(255, 0, 0));
-	myFractal.addRange(0.5, RGB(255, 255, 0));
-	myFractal.addRange(1.0, RGB(255, 255, 255));
-
-#if 1
+	myFractal.addRange(0.5, RGB(255, 255, 255));
+	myFractal.addRange(1.0, RGB(255, 255, 0));
 
 	myFractal.addZoom(Zoom(295, 202, 0.1));
 	myFractal.addZoom(Zoom(312, 304, 0.1));
 
 	myFractal.run(fileName);
-
-#endif
 
 	cout << "Finished!" << endl;
 

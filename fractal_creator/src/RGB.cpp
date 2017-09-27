@@ -20,7 +20,6 @@ RGB RGB::operator -(const RGB &other){
 	return result;
 }
 
-
 ostream &operator<<(ostream &out, const RGB &rgb){
 	out << "red: " << rgb.red << " green: " << rgb.green << " blue: " << rgb.blue;
 

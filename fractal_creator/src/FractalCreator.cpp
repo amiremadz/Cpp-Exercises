@@ -152,10 +152,6 @@ void FractalCreator::calculateTotalPixels(){
 
 void FractalCreator::drawFractal(){
 
-	//RGB startColor(0, 0, 0);
-	//RGB endColor(0, 0, 255);
-	//RGB colorDiff = endColor - startColor;
-
 	for (uint32_t x = 0; x < mWidth; x++) {
 		for (uint32_t y = 0; y < mHeight; y++) {
 
