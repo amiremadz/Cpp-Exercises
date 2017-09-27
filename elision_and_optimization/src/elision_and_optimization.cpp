@@ -16,7 +16,7 @@ using namespace std;
 class Test{
 private:
 	static const int kSIZE = 100;
-	int *m_pBuffer{nullptr};
+	int *m_pBuffer { nullptr };
 public:
 	Test(){
 		//cout << "empty constructor" << endl;
@@ -33,7 +33,7 @@ public:
 	}
 
 	Test(const Test &other){
-		//cout << "copy constructor" << endl;
+		cout << "copy constructor" << endl;
 		m_pBuffer = new int[kSIZE]{};
 		memcpy(m_pBuffer, other.m_pBuffer, kSIZE*sizeof(int));
 	}
@@ -46,12 +46,24 @@ public:
 	}
 	//*/
 
-
 public:
 	Test operator=(const Test &other){
 		//cout << "assignment" << endl;
 		m_pBuffer = new int[kSIZE]{};
 		memcpy(m_pBuffer, other.m_pBuffer, kSIZE*sizeof(int));
+		return *this;
+	}
+
+	Test operator=(Test &&other){
+		cout << "move assignement" << endl;
+		// The object that we are assigning to, already has beed alocated memory
+		// it needs to be freed.
+		delete[] m_pBuffer;
+		m_pBuffer= other.m_pBuffer;
+
+		// Now, we should stop other trying to delete that memory
+		other.m_pBuffer = nullptr;
+
 		return *this;
 	}
 
@@ -92,7 +104,7 @@ void check_int(int &&rInt){
 
 //‑fno‑elide‑constructors
 int main() {
-
+#if 1
 	// Without optimization:
 	// constructor: Test()
 	// copy constructor: return->copy to temporary return value
@@ -176,12 +188,15 @@ int main() {
 
 
 	cout << endl;
-
+#endif
 	// Move constructor
 
 	vector<Test> vect;
 	vect.push_back(Test());
 
+	// Move assignment constructor
+	Test test;
+	test = getTest(); // assigning to an Rvalue
 
 	return 0;
 }
