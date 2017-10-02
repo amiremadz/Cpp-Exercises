@@ -12,6 +12,7 @@
 #include <stdint.h>
 #include <initializer_list>
 #include <cstring>
+#include <iostream>
 
 using namespace std;
 
@@ -25,7 +26,7 @@ class array {
 	public:
 		array() = default;
 
-		array(uint32_t length) : mLength(length), mArray(new T[length]) { }
+		array(uint32_t length) : mLength(length), mArray(new T[length]{}) { }
 
 		array(uint32_t length, initializer_list<T> list) : mLength(length), mArray(new T[length]) {
 			for(T item : list){
@@ -41,11 +42,41 @@ class array {
 		}
 
 	public:
-		array(const array &other) {
+		array operator=(const array &other){
+			cout << "assignment constructor" << endl;
 			mLength = other.mLength;
-			mArray = new T[mLength];
+			mArray = new T[mLength];							// This is very important!!!
 			memcpy(mArray, other.mArray, mLength * sizeof(T));
 			mIndex = other.mIndex;
+			return *this;
+		}
+
+		array operator=(array &&other){
+			cout << "Move assignment" << endl;
+			mLength = other.mLength;
+			delete[] mArray;
+			mArray = other.mArray;
+			mIndex = other.mIndex;
+			other.mArray = nullptr;
+			return *this;
+		}
+
+	public:
+		array(const array &other) {
+			cout << "copy constructor" << endl;
+			mLength = other.mLength;
+			mArray = new T[mLength]{};
+			memcpy(mArray, other.mArray, mLength * sizeof(T));
+			mIndex = other.mIndex;
+		}
+
+
+		array(array &&other){
+			cout << "Move constructor" << endl;
+			mLength = other.mLength;
+			mArray = other.mArray;
+			mIndex = other.mIndex;
+			other.mArray = nullptr;
 		}
 
 		//array operator=(const array &other);

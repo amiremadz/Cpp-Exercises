@@ -8,7 +8,7 @@
 
 #include <iostream>
 #include "array.h"
-
+#include <vector>
 
 
 int main() {
@@ -21,6 +21,7 @@ int main() {
 	arr_2.add(3);
 	arr_2.add(4);
 
+	// Copy constructor
 	array<int32_t> arr_3(arr_2);
 
 	array<int32_t> arr_4(4);
@@ -61,13 +62,38 @@ int main() {
 
 
 	for(auto item : arr_1){
-		cout << item << endl;
+		cout << item << " ";
 	}
+	cout << endl;
 
 	for(auto itt = arr_1.begin(); itt != arr_1.end(); itt++){
-		cout  << *itt << endl;
+		cout  << *itt << " ";
 	}
+	cout << endl;
 
-	cout << "Done" << endl; // prints !!!Hello World!!!
+	// Move constructor
+	vector<array<int>> vec;
+	vec.push_back(array<int>(3, {22, 33, 44}));
+	cout << vec[0] << endl;
+
+	// Copy constructor
+	array<int> arr_5 = arr_1;
+	cout << arr_5 << endl;
+
+	// Assignment constructor
+	array<int> arr_6;
+	arr_6 = arr_1;
+
+	cout << "array_6:" << endl;
+	cout << arr_6 << endl;
+
+	// Move assignment
+	array<int> arr_7;
+	arr_7 = array<int>(2, {8, 9});
+
+	cout << "array_7:" << endl;
+	cout << arr_7 << endl;
+
+	cout << "Done" << endl;
 	return 0;
 }
