@@ -9,64 +9,159 @@
 #define ARRAY_H_
 
 #include <ostream>
-#include cstdint>
-
+#include <stdint.h>
+#include <initializer_list>
+#include <cstring>
 
 using namespace std;
 
 template<typename T>
 class array {
 	private:
-		T *mArray{nullptr};
 		uint32_t mLength{0};
+		T *mArray{nullptr};
 		uint32_t mIndex{0};
 
 	public:
-		array();
-		array(uint32_t length);
+		array() = default;
+
+		array(uint32_t length) : mLength(length), mArray(new T[length]) { }
+
+		array(uint32_t length, initializer_list<T> list) : mLength(length), mArray(new T[length]) {
+			for(T item : list){
+				if(mIndex < mLength){
+					mArray[mIndex] = item;
+					mIndex++;
+				}
+				else{
+					cout << "constructor: extra item!" << endl;
+				}
+
+			}
+		}
 
 	public:
-		void add(T value);
-		void get(uint32_t index);
+		array(const array &other) {
+			mLength = other.mLength;
+			mArray = new T[mLength];
+			memcpy(mArray, other.mArray, mLength * sizeof(T));
+			mIndex = other.mIndex;
+		}
+
+		//array operator=(const array &other);
 
 	public:
-		array(const array &other);
-		array operator=(const array &other);
+		bool operator==(const array &other) const {
+			if(mLength != other.mLength){
+				return false;
+			}
+
+			for(uint32_t i = 0; i < mLength; i++){
+				if(mArray[i] != other.mArray[i]){
+					return false;
+				}
+			}
+
+			return true;
+		}
+
+		friend bool operator!=(const array &lhs, const array &rhs) {
+			return !(lhs == rhs);
+		}
 
 	public:
-		bool operator==(const array &other) const;
-		bool operator!=(const array &other) const;
-		friend ostream &operator<<(ostream &out, const array<T> &arr);
-		T operator[](uint32_t index) const;
+		T operator[](uint32_t index) const {
+			return mArray[index];
+		}
+
+		friend ostream &operator<<(ostream &out, array &arr) {
+			for(uint32_t i = 0; i < arr.mLength; i++){
+				out << arr.mArray[i] << " ";
+			}
+			return out;
+		}
 
 	public:
-		iterator begin() const;
-		iterator end() const;
+		uint32_t size() const { return mLength; }
+
+		void print(){
+			for(uint32_t i = 0; i < mLength; i++){
+				cout << mArray[i] << " ";
+			}
+			cout << endl;
+		}
+
+		T get(uint32_t index) const { return mArray[index]; }
+
+		void add(T item) {
+			if(mIndex < mLength){
+				mArray[mIndex] = item;
+				mIndex++;
+			}
+			else{
+				cout << "No more add: array is full!" << endl;
+			}
+		}
+
+		void add(initializer_list<T> list) {
+			for(T item : list){
+				if(mIndex < mLength){
+					mArray[mIndex] = item;
+					mIndex++;
+				}
+				else{
+					cout << "No more add: array is full!" << endl;
+				}
+			}
+		}
 
 	public:
 		class iterator;
 
 	public:
-		virtual ~array();
+			iterator begin(){
+				return iterator(*this, 0);
+			}
+
+			iterator end(){
+				return iterator(*this, mLength);
+			}
+
+	public:
+		~array() { delete[] mArray; }
 };
 
+
 template<typename T>
-ostream &operator<<(ostream &out, const array<T> &arr);
-
-
-array<T>::iterator{
+class array<T>::iterator{
 	private:
-		T &mArray;
-		uint32_t &mIndex;
-	public:
-		iterator(T &array, uint &index) {mArray = array; mIndex = index;};
+		array<T> &mArrayObj;
+		uint32_t mIndex;
 
 	public:
-		T operator*();
-		void operator++();
-		void operator--();
-		bool operator==(const iterator &other);
-		bool operator!=(const iterator &other);
+		iterator(array<T> &arr, uint32_t index): mArrayObj(arr), mIndex(index) { };
+
+	public:
+		T operator*() const { return mArrayObj.mArray[mIndex]; }
+
+		iterator operator++() {
+			mIndex++;
+			return *this;
+		}
+
+		iterator operator++(int) {
+			mIndex++;
+			return *this;
+		}
+
+		iterator operator--() {
+			mIndex--;
+			return *this;
+		}
+
+		bool operator!=(const iterator &other){
+			return mIndex != other.mIndex;
+		}
 
 };
 
