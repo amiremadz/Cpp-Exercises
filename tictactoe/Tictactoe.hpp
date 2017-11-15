@@ -23,6 +23,7 @@ class Tictactoe{
 
     private:
         bool checkIfWin(char symbol);    
+        void getUserInput(Gameboard board, char symbol, int &row, int &col);
 };
 
 Tictactoe::Tictactoe(){
@@ -47,6 +48,21 @@ bool Tictactoe::checkIfWin(char symbol){
     return win;
 }
 
+void Tictactoe::getUserInput(Gameboard board, char symbol, int &row, int &col){
+    do {
+        bool row_correct = false;
+        bool col_correct = false;
+        do {
+            cout << "Player "<< symbol << " Enter row, column: " << flush;
+            cin >> row;
+            cin >> col;
+
+            row_correct = (row >= 0) && (row < 4);
+            col_correct = (col >= 0) && (col < 4);
+        } while (!row_correct || !col_correct);
+    } while (board.getGameSpace(row, col) != '-');
+}
+
 void Tictactoe::play(){
     int row, col;
     char symbol_1 = 'x';
@@ -54,14 +70,7 @@ void Tictactoe::play(){
 
     do {
         char symbol = symbol_1;
-
-        do {
-            cout << "Player 1, Enter row and column:" << endl;
-            cout << "row column: " << flush;
-            cin >> row;
-            cin >> col;
-        } while (board.getGameSpace(row, col) != '-');
-
+        getUserInput(board, symbol, row, col);
         board.setGameSpace(row, col, symbol);
         board.printInfo();
 
@@ -69,16 +78,9 @@ void Tictactoe::play(){
             cout << "Player 1 won!" << endl;
             return;
         }
-        
+
         symbol = symbol_2;
-
-        do {
-            cout << "Player 2, Enter row and column:" << endl;
-            cout << "row column: " << flush;
-            cin >> row;
-            cin >> col;
-        } while (board.getGameSpace(row, col) != '-');
-
+        getUserInput(board, symbol, row, col);
         board.setGameSpace(row, col, symbol);
         board.printInfo();
         
