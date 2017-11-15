@@ -27,10 +27,10 @@ class Tictactoe{
 };
 
 Tictactoe::Tictactoe(){
-    cout << "Enter Player 1 name: " << flush;
+    cout << "Enter Player 1 (x) name: " << flush;
     cin >> player_1;
     cout << endl;
-    cout << "Enter Player 2 name: " << flush;
+    cout << "Enter Player 2 (o) name: " << flush;
     cin >> player_2;
     cout << endl;
 }
