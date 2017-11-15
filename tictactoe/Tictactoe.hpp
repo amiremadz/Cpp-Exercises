@@ -45,7 +45,6 @@ void Tictactoe::play(){
     char symbol_2 = 'o';
 
     do {
-        board.printInfo();
 
         do {
             cout << "Player 1, Enter row and column:" << endl;
@@ -70,7 +69,8 @@ void Tictactoe::play(){
         } while (board.getGameSpace(row, col) != '-');
 
         board.setGameSpace(row, col, symbol_2);
-
+        board.printInfo();
+        
         if(board.fourInRow(symbol_2) || board.fourInColumn(symbol_2) || board.fourInDiagonal(symbol_2)){
             cout << "Player 2 won!" << endl;
             return;
