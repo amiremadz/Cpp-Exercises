@@ -56,6 +56,7 @@ int main() {
 
 	cout << endl;
 
+	cout << "print buffer using iterator:" << endl;
 	for(Circular<int>::iterator it=buff.begin(); it != buff.end(); it++){
 		cout << *it << endl;
 	}
@@ -66,6 +67,13 @@ int main() {
 
 	// Rvalue reference
 	Circular<int> &&pTest = Circular<int>();
+	cout << endl;
+
+
+	cout << "print buffer using iterator not from begining:" << endl;
+	for(Circular<int>::iterator it=buff.begin()+1; it != buff.end(); it++){
+		cout << *it << endl;
+	}
 
 	return 0;
 }

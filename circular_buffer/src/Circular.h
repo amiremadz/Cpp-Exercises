@@ -137,11 +137,13 @@ public:
 	}
 
 public:
+	//prefix
 	iterator operator++(){
 		mIndex++;
 		return *this;
 	}
 
+	// postfix
 	iterator operator++(int){
 		mIndex++;
 		return *this;
@@ -153,6 +155,11 @@ public:
 
 	bool operator!=(const iterator &other) const {
 		return mIndex != other.mIndex;
+	}
+
+	iterator operator+(const int right){
+		mIndex += right;
+		return *this;
 	}
 };
 
