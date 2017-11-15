@@ -20,6 +20,9 @@ class Tictactoe{
         void play(); 
         string getPlayer1Name();
         string getPlayer2Name();
+
+    private:
+        bool checkIfWin(char symbol);    
 };
 
 Tictactoe::Tictactoe(){
@@ -39,12 +42,18 @@ string Tictactoe::getPlayer2Name(){
     return player_2;
 }
 
+bool Tictactoe::checkIfWin(char symbol){
+    bool win = board.fourInRow(symbol) || board.fourInColumn(symbol) || board.fourInDiagonal(symbol);
+    return win;
+}
+
 void Tictactoe::play(){
     int row, col;
     char symbol_1 = 'x';
     char symbol_2 = 'o';
 
     do {
+        char symbol = symbol_1;
 
         do {
             cout << "Player 1, Enter row and column:" << endl;
@@ -53,14 +62,16 @@ void Tictactoe::play(){
             cin >> col;
         } while (board.getGameSpace(row, col) != '-');
 
-        board.setGameSpace(row, col, symbol_1);
+        board.setGameSpace(row, col, symbol);
         board.printInfo();
 
-        if(board.fourInRow(symbol_1) || board.fourInColumn(symbol_1) || board.fourInDiagonal(symbol_1)){
+        if(checkIfWin(symbol)){
             cout << "Player 1 won!" << endl;
             return;
         }
         
+        symbol = symbol_2;
+
         do {
             cout << "Player 2, Enter row and column:" << endl;
             cout << "row column: " << flush;
@@ -68,10 +79,10 @@ void Tictactoe::play(){
             cin >> col;
         } while (board.getGameSpace(row, col) != '-');
 
-        board.setGameSpace(row, col, symbol_2);
+        board.setGameSpace(row, col, symbol);
         board.printInfo();
         
-        if(board.fourInRow(symbol_2) || board.fourInColumn(symbol_2) || board.fourInDiagonal(symbol_2)){
+        if(checkIfWin(symbol)){
             cout << "Player 2 won!" << endl;
             return;
         }
