@@ -1,5 +1,8 @@
 #include <iostream>
 
+// Note: If it turns out that the alignment of the external library is mismatched
+// to your code, you can resolve this using #pragma pack.
+
 class Something {
 public:
     Something() {
