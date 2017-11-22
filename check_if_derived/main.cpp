@@ -19,6 +19,7 @@ class IsDerivedFromHelper{
         class No  { };
         class Yes { No no[3]; }; // make sure sizeof(Yes) neq sizeof(No)
 
+        // static is needed to be able to call it from class
         static Yes Test(B*);     // if D* can be converted to B*, this one is selected
         static No  Test(...);
     public:
