@@ -1,4 +1,5 @@
 #include <iostream>
+#include <cassert>
 
 using namespace std;
 
@@ -6,6 +7,8 @@ class B {
     protected:    
         float x{0};
 };
+
+typedef B Cloneable;
 
 class A : public B {
     public:
@@ -30,6 +33,24 @@ class IsDerivedFromHelper{
         // 0: nullptr
         enum { value = ( sizeof(Yes) == sizeof(Test(static_cast<D*>(0))) ) };
 };
+
+// Using IsDerivedFrom1
+// // helper to enforce derivation from Cloneable
+template<typename T>
+class X{
+    public:
+        bool validateRequirements() const{
+            typedef IsDerivedFromHelper<T, Cloneable> Y; // do not forget typedef!
+            assert(Y::value);
+            return true;
+        }
+    public:
+        ~X(){
+            assert(validateRequirements);
+        }    
+};
+
+
 
 // check if C is derived from P
 template<class C, class P>
