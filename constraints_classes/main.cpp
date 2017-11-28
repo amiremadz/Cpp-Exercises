@@ -30,7 +30,7 @@ class HasClone{
     public:
         static void constraints(){
             T* (T::*test)() const = &T::Clone;
-            test;
+            test;  // suppress warnings about unused variables
         }
     public:
         HasClone(){
@@ -54,8 +54,8 @@ class G{
     private:
         int n{1};
     public:
-        T* Clone() {
-            return new T(*this);
+        G* Clone() {
+            return new G(*this);
         }
 };
 
@@ -66,7 +66,7 @@ class D : HasClone<T>{
 
 int main(){
     D<T> d1;
-    D<G> d2;
+    //D<G> d2;
     //C<T> test1;
     //C<G> test2;
 
