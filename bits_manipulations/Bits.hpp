@@ -9,7 +9,8 @@ class Bits{
         Bits(int x, int y) : m_x(x), m_y(y) {}   
     public:
         int hamming();
-        int reverse();
+        static int reverse(int x);
+        static int count_setbits(int x);
 };
 
 

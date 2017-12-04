@@ -1,6 +1,5 @@
 #include "Bits.hpp"
 
-
 int Bits::hamming(){
     int dist = 0;
     while(m_x || m_y){
@@ -13,3 +12,25 @@ int Bits::hamming(){
     }
     return dist;
 }
+
+int Bits::reverse(int x){
+    int mask = 1;
+    int result = 0;
+
+    while(x){
+        result <<= 1;
+        result |= (x & mask);
+        x >>= 1;
+    }
+    return result; 
+}
+
+int Bits::count_setbits(int x){
+    int count = 0;
+    while(x){
+        ++count;
+        x &= (x - 1);
+    }
+    return count;
+}
+
