@@ -56,16 +56,16 @@ class Search{
             int idx2 = -1;
             vector<mypair> hashmap(MAX, make_pair(0, -1)); 
             for(int i = 0; i < m_vec.size(); ++i){
-                if( hashmap[m_sum - m_vec[i].first].first){
+                int idx_pair =  m_sum - m_vec[i].first;
+                if( hashmap[ idx_pair ].first){
                     idx1 = m_vec[i].second;
-                    idx2 = hashmap[m_sum - m_vec[i].first].second; 
+                    idx2 = hashmap[ idx_pair ].second; 
                 }
                 else{
                     hashmap[m_vec[i].first].first = 1;
                     hashmap[m_vec[i].first].second = m_vec[i].second;
                 }
             }
-
             return make_pair(idx1, idx2);
         }
 };
