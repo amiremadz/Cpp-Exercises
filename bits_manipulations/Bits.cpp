@@ -34,3 +34,13 @@ int Bits::count_setbits(int x){
     return count;
 }
 
+int Bits::log2(int x){
+    int result = 0;
+    while(x){
+        ++result;
+        x >>= 1;
+    }
+    return result;
+}
+
+

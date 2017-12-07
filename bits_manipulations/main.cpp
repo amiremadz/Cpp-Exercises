@@ -21,5 +21,7 @@ int main(){
     cout << "Reverse bits of " << y << ": " << manip.reverse(y) << endl;
     cout << "Reverse bits of " << z << ": " << manip.reverse(z) << endl;
 
-    return 0;
+    cout << "Number of bits in " << z << ": " << Bits::log2(z) << endl;
+
+   return 0;
 }
