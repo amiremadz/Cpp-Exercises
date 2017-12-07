@@ -1,6 +1,23 @@
 #include <iostream>
 using namespace std;
 
+
+// Enforce function signature
+// Method 1
+void foo1(int a, int b){
+}
+
+template<typename T, typename U>
+void foo1(T a, U b) = delete;
+
+// Method 2
+template<typename T, typename U>
+void foo2(T a, U b);
+
+template<>
+void foo2(int a, int b){
+}
+
 // check if classes are same
 template<typename T, typename U>
 class sameClass{
