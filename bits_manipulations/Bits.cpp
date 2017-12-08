@@ -43,4 +43,19 @@ int Bits::log2(int x){
     return result;
 }
 
+int Bits::complement(int x){
+    int shift = 0;
+    int result = 0;
 
+    while(x){
+        int lsb = x & 1;
+        lsb ^= 1;        
+        lsb <<= shift;
+
+        result |= lsb;
+
+        x >>= 1;
+        ++shift;
+    }
+    return result;
+}

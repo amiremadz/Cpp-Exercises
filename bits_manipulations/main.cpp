@@ -23,5 +23,7 @@ int main(){
 
     cout << "Number of bits in " << z << ": " << Bits::log2(z) << endl;
 
-   return 0;
+    cout << "Complement of " << y << ": " << Bits::complement(y) << endl;
+
+    return 0;
 }
