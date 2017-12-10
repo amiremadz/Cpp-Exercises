@@ -4,10 +4,10 @@ all: main.o Bits.o
 	g++ main.o Bits.o -o runme.out $(GCC_OPTS)
 
 main.o: main.cpp
-	g++ -c main.cpp -std=c++11 $(GCC_OPTS)
+	g++ -c main.cpp $(GCC_OPTS)
 
 Bits.o: Bits.cpp
-	g++ -c Bits.cpp -std=c++11 $(GCC_OPTS)
+	g++ -c Bits.cpp $(GCC_OPTS)
 
 clean:
 	rm -f *.o
