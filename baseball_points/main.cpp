@@ -44,45 +44,82 @@ using namespace std;
 
 class Baseball {
     private:
-        stack<int> valids;
+        stack<int> m_valids;
+        vector<int> m_scores;
     public:
-        int calPoints(vector<string>& ops) {
+        int calPoints1(vector<string>& ops) {
             int sum = 0;
+            
             for(string item : ops){
                 if(!item.compare("+")){
-                    if(!valids.empty()){           	
-                        int top = valids.top();
-                        valids.pop();
-                        if(!valids.empty()){
-                            int score = valids.top() + top;
-                            valids.push(top);
-                            valids.push(score);
+                    if(!m_valids.empty()){           	
+                        int top = m_valids.top();
+                        m_valids.pop();
+                        if(!m_valids.empty()){
+                            int score = m_valids.top() + top;
+                            m_valids.push(top);
+                            m_valids.push(score);
                             sum += score;
                         }
                     }
                 }
                 else if(!item.compare("D")){
-                    if(!valids.empty()){
-                        int score = 2 * valids.top();
-                        valids.push(score);
+                    if(!m_valids.empty()){
+                        int score = 2 * m_valids.top();
+                        m_valids.push(score);
                         sum += score;
                     }
                 }
                 else if(!item.compare("C")){
-                    if(!valids.empty()){
-                        int top = valids.top();
-                        valids.pop();
+                    if(!m_valids.empty()){
+                        int top = m_valids.top();
+                        m_valids.pop();
                         sum -= top;
                     }
                 }
                 else{
                     int score = stoi(item);
-                    valids.push(score);
+                    m_valids.push(score);
                     sum += score;
                 }
             }
         return sum;
         }
+        
+        int calPoints2(vector<string> &ops){
+            int sum = 0;
+
+            for(string item : ops){
+                if(item == "+"){
+                    int size = m_scores.size();
+                    int score = m_scores[size - 1] + m_scores[size - 2];
+                    m_scores.push_back(score);
+                    sum += score;
+                    continue;
+                }
+                if(item == "D"){
+                    int score = 2 * m_scores.back();
+                    m_scores.push_back(score);
+                    sum += score;
+                    continue;
+                }
+                if(item == "C"){
+                    int top = m_scores.back();
+                    m_scores.pop_back();
+                    sum -= top;
+                    continue;
+                }
+                else{
+                    int score = stoi(item);
+                    m_scores.push_back(score);
+                    sum += score;
+                }
+
+            }
+            return sum;
+        }
+
+
 };
 
 
@@ -90,15 +127,19 @@ int main(){
     Baseball points;
     
     vector<string> ops({"5", "2", "C", "D", "+"});
-    cout << points.calPoints(ops) << endl;
     cout << endl; 
+    cout << points.calPoints1(ops) << endl;
+    cout << points.calPoints2(ops) << endl;
     ops.clear();
-	ops = {"5","-2","4","C","D","9","+","+"};
-    cout << points.calPoints(ops) << endl;
     cout << endl;
+	ops = {"5","-2","4","C","D","9","+","+"};
+    cout << points.calPoints1(ops) << endl;
+    cout << points.calPoints2(ops) << endl;
     ops.clear();
+    cout << endl;
     ops = {"61","-50","65","+","D","-99","-58","88","19","-11"};
-    cout << points.calPoints(ops) << endl;
+    cout << points.calPoints1(ops) << endl;
+    cout << points.calPoints2(ops) << endl;
  
 
     return 0;
