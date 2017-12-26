@@ -41,7 +41,6 @@ public:
 
         if(t1 == nullptr){
             return t2;
-            
         }
 
         if(t2 == nullptr){
