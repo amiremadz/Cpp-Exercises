@@ -13,6 +13,7 @@ class Bits{
         static int complement(int x);
         static int count_setbits(int x);
         static int log2(int x);
+        static bool alt_bits(int n);
 };
 
 

@@ -8,6 +8,7 @@ int main(){
     int x = 1;
     int y = 4;
     int z = 19;
+    int n = 5;
 
     Bits manip(x, y);
 
@@ -24,6 +25,8 @@ int main(){
     cout << "Number of bits in " << z << ": " << Bits::log2(z) << endl;
 
     cout << "Complement of " << y << ": " << Bits::complement(y) << endl;
-
+    
+    cout << "Alternate bits " << n << ": " << Bits::alt_bits(n)  << endl;
+    
     return 0;
 }
