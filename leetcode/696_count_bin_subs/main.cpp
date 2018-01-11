@@ -58,7 +58,9 @@ public:
                 ++idx;
             }
             int len_curr = (idx - beg + 1);
-            result += min(len_prev, len_curr);
+            if(idx > 0){
+                result += min(len_prev, len_curr);
+            }
             len_prev = len_curr;
             ++idx;
         }
