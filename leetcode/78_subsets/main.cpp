@@ -81,6 +81,23 @@ public:
     }
 };
 
+class Solution_bitmanip {
+public:
+    vector<vector<int>> subsets(vector<int>& nums) {
+        const int num_subs = (1 << nums.size());
+        vector<vector<int>> subs(num_subs, vector<int>());
+        
+        for(int idx_num = 0; idx_num < nums.size(); ++idx_num){
+            for(int idx_sub = 0; idx_sub < num_subs; ++idx_sub){
+                if ((idx_sub >> idx_num) & 1){
+                    subs[idx_sub].push_back(nums[idx_num]);
+                }
+            }
+        }
+        
+        return subs;
+    }
+};
 
 int main(){
 
