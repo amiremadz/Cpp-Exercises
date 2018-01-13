@@ -60,6 +60,7 @@ int Bits::complement(int x){
     return result;
 }
 
+// binary numbers with alternating bits
 bool Bits::alt_bits(int n){
     int x = n ^ (n >> 1);
     return !((x + 1) & x);
