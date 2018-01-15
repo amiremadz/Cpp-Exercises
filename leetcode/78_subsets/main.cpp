@@ -99,6 +99,30 @@ public:
     }
 };
 
+
+class Solution_backtrack {
+public:
+    vector<vector<int>> subsets(vector<int>& nums) {
+        vector<vector<int>> result(1, vector<int>());
+        vector<int> sub;
+        
+        helper(nums, 0, sub, result);
+        
+        return result;        
+    }
+    
+    void helper(vector<int> &nums, int idx, vector<int> sub, vector<vector<int>> &result){
+        for(int i = idx; i < nums.size(); ++i){
+            sub.push_back(nums[i]);
+            result.push_back(sub);
+            
+            helper(nums, i + 1, sub, result);
+            sub.pop_back();            
+        }
+    }
+    
+};
+
 int main(){
 
 	vector<int> vec = {1, 2, 3};
