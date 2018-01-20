@@ -5,22 +5,22 @@
 
 using namespace std;
 
-typedef pair<float, float> point_f;
+typedef pair<float, float> Point_f;
 
 class Closest {
     private:
-        vector<point_f> m_points;
+        vector<Point_f> m_points;
         int m_k{0};
         vector<float> m_dists;
 
     public:
-        Closest(vector<point_f> points, int k) : m_points(points), m_k(k) { }
+        Closest(vector<Point_f> points, int k) : m_points(points), m_k(k) { }
 
     private:
         void calc_dist();
 
     public:
-        vector<point_f> find_closests();
+        vector<Point_f> find_closests_naive();
 };
 
 void Closest::calc_dist(){
@@ -32,9 +32,9 @@ void Closest::calc_dist(){
     }
 }
 
-vector<point_f> Closest::find_closests(){
+vector<Point_f> Closest::find_closests_naive(){
     calc_dist();
-    vector<point_f> result;
+    vector<Point_f> result;
 
     for(int idx_k = 0; idx_k < m_k; ++idx_k){
         float min_val = FLT_MAX;
@@ -42,11 +42,11 @@ vector<point_f> Closest::find_closests(){
 
         int idx = 0;
         for(auto dist : m_dists){
-            if(dist < min_val){
+            if(dist <= min_val){
                 min_val = dist;
                 min_idx = idx; 
-                ++idx;
             }
+            ++idx;
         }
 
         result.push_back(m_points[min_idx]);
@@ -57,21 +57,19 @@ vector<point_f> Closest::find_closests(){
     return result;
 }
 
-
 int main(){
-    point_f p1(1, 1);
-    point_f p2(.2, .2);
-    point_f p3(2, 2);
-    point_f p4(4, 4);
-
-    vector<point_f> points = {p1, p2, p3, p4};
+    vector<Point_f> result;
     int k = 2;
     
-    vector<point_f> result;
+    Point_f p1(1, 1);
+    Point_f p2(.2, .2);
+    Point_f p3(2, 2);
+    Point_f p4(.4, .4);
+
+    vector<Point_f> points = {p1, p2, p3, p4};
 
     Closest close_points(points, k);
-
-    result = close_points.find_closests();
+    result = close_points.find_closests_naive();
 
     for(auto point : result){
         cout << point.first << ", " << point.second << flush;
