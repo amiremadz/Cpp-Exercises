@@ -34,7 +34,7 @@ class Closest {
     private:
         class DistComparator{
             public:
-                int operator() (const  Dist_t &dist_1, const Dist_t &dist_2) const{
+                bool operator() (const  Dist_t &dist_1, const Dist_t &dist_2) const{
                     return (dist_1.second <= dist_2.second);
                 }
         };
