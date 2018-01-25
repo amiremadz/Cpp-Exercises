@@ -73,3 +73,46 @@ public:
         return (s1.empty() && s2.empty());        
     }
 };
+
+class MyQueue {
+private:
+    stack<int> m_s;
+private:
+    void helper(int x){
+        if(m_s.empty()){
+            m_s.push(x);
+            return;
+        }
+        
+        int top = m_s.top();
+        m_s.pop();
+        helper(x);
+        m_s.push(top);
+    }
+public:
+    /** Initialize your data structure here. */
+    MyQueue() {
+    }
+    
+    /** Push element x to the back of queue. */
+    void push(int x) {
+        helper(x);
+    }
+    
+    /** Removes the element from in front of queue and returns that element. */
+    int pop() {
+        int top = m_s.top();
+        m_s.pop();
+        return top;
+    }
+    
+    /** Get the front element. */
+    int peek() {
+        return m_s.top();
+    }
+    
+    /** Returns whether the queue is empty. */
+    bool empty() {
+        return m_s.empty();        
+    }
+};
