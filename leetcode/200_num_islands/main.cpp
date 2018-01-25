@@ -37,6 +37,7 @@ public:
                 if(grid[row][col] == '1'){
                     ++result;
                     dfs(grid, row, col);
+                    //bfs(grid, row, col);
                 }
             }
         }
@@ -63,5 +64,34 @@ private:
                 dfs(grid, row_next, col_next);
             }               
         }                
+    }
+
+    void bfs(vector<vector<char>> &grid, int row, int col){
+        queue<pair<int, int>> myq;
+        
+        int m = grid.size();
+        int n = grid[0].size();
+                
+        myq.push(make_pair(row, col));
+        
+        int row_mv[4] = {0, -1,  0, 1};
+        int col_mv[4] = {1,  0, -1, 0};
+        
+        while(!myq.empty()){
+            int r = myq.front().first;
+            int c = myq.front().second;
+            myq.pop();
+            
+            bool valid = (r >= 0) && (r < m) && (c >= 0) && (c < n) && (grid[r][c] == '1');
+            
+            if(valid){
+                grid[r][c] = 'x';
+                for(int idx_mv = 0; idx_mv < 4; ++idx_mv){
+                    int row_next = r + row_mv[idx_mv];
+                    int col_next = c + col_mv[idx_mv];
+                    myq.push(make_pair(row_next,col_next));
+                }
+            }
+        }
     }
 };
