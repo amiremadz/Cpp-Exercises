@@ -77,6 +77,11 @@ vector<Point_f> Closest::find_closests_naive(){
     return result;
 }
 
+/*
+ * use a max heap: put the first k element in it.
+ * comapre the rest with its top.
+ * if element is smaller than top, pop top, and then push.
+ */
 vector<Point_f> Closest::find_closests_heap(){
     vector<Point_f> result;
     priority_queue<Dist_t, vector<Dist_t>, DistComparator> pq;
