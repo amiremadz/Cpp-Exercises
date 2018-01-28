@@ -55,7 +55,7 @@ public:
 
 
 int main(){
-	vector<int> arr= {3, 4, 5, 6, 1, 2};
+	vector<int> arr= {3, 4, 5, 6, 1, 1, 2, 2};
 	int k = 2;
 	Solution sol;
 
