@@ -4,11 +4,24 @@ How will you calculate the  minimum number of rooms required to accommodate all 
 */
 #include <vector>
 #include <iostream>
-#include <utility>
+#include <utility>   // pair
+#include <algorithm> // sort
 
 using namespace std;
 
 typedef pair<int, int> interval_t;
+
+class myTime{
+    public:
+        int val{-1};
+        int pos{-1};
+    public:
+        myTime(int value, int position) : val(value), pos(position) {}
+    public:
+        bool operator<(const myTime &rhs) const {
+            return val < rhs.val;
+        }
+}; 
 
 class Hotel{
     private:
@@ -16,9 +29,10 @@ class Hotel{
     public:
         Hotel(vector<interval_t> intervals) : m_intervals(intervals) { }
     public:
-        int min_rooms() { return method1(); };
+        int min_rooms() { return method2(); };
     private:
         int method1();
+        int method2();
 };
 
 int Hotel::method1(){
@@ -46,6 +60,37 @@ int Hotel::method1(){
 
     return result;
 }
+
+int Hotel::method2(){
+    int result = 0;
+    int count = 0;
+    vector<myTime> times_all;
+
+    for(auto item : m_intervals){
+        myTime beg(item.first, 0);
+        myTime end(item.second, 1);
+
+        times_all.push_back(beg);
+        times_all.push_back(end);
+    }
+
+    sort(times_all.begin(), times_all.end());
+
+    for(auto item : times_all){
+        if(item.pos == 0){
+            ++count;
+        }
+        else if(item.pos == 1){
+            --count;
+        }
+        if(count > result){
+            result = count;
+        }
+    }
+
+    return result;
+}
+
 
 int main(){
     interval_t guest0(1, 3);
