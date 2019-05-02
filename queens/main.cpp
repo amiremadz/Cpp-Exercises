@@ -9,6 +9,10 @@ public:
     virtual ~IPrintable() = default;
 };
 
+void IPrintable::print(std::ostream& os) const {
+    os << "Hi!";
+}
+
 std::ostream& operator<<(std::ostream& os, const IPrintable& obj){
     obj.print(os);
     return os;
@@ -40,10 +44,10 @@ void Queens::print(std::ostream& os) const {
         for (int row = 0; row < m_numQueens; ++row)
         {    
             for (int col = 0; col < m_numQueens; ++col)
-                std::cout << board[row][col] << " ";
-            std::cout << std::endl;
+                os << board[row][col] << " ";
+            os << std::endl;
         }
-        std::cout << std::endl;
+        os << std::endl;
     }
 }
 
@@ -85,16 +89,15 @@ bool Queens::isValid(int row, int col) const {
     return true;
 }
 
-
 int main()
 {
-    Queens *q = new Queens{6};
+    Queens *q = new Queens{4};
     q->solve();
-    std::cout << *q << std::endl;
+    std::cout << *q;
   
     Queens q1 = Queens{4};
     q1.solve();
-    std::cout << q1 << std::endl;
+    std::cout << q1;
   
     std::getchar();
     
