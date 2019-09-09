@@ -2,16 +2,44 @@
 #include <time.h>
 #include <unistd.h>
 #include <termios.h>
+#include <queue>
+#include <utility>
 
-char getch();
+char getch() {
+        char buf = 0;
+        struct termios old = { .c_oflag = 0};
+        if (tcgetattr(0, &old) < 0)
+                perror("tcsetattr()");
+        old.c_lflag &= ~ICANON;
+        old.c_lflag &= ~ECHO;
+        old.c_cc[VMIN] = 1;
+        old.c_cc[VTIME] = 0;
+        if (tcsetattr(0, TCSANOW, &old) < 0)
+                perror("tcsetattr ICANON");
+        if (read(0, &buf, 1) < 0)
+                perror ("read()");
+        old.c_lflag |= ICANON;
+        old.c_lflag |= ECHO;
+        if (tcsetattr(0, TCSADRAIN, &old) < 0)
+                perror ("tcsetattr ~ICANON");
+        return (buf);
+}
 
 bool gameOver;
+bool ateFruit;
+
 const int width = 20;
 const int height = 20;
+
 int xOffset = 2;
-int x, y; // snake head coordinates
-int fruitX, fruitY;
+
+std::pair<int, int> head;
+std::pair<int, int> fruit;
+
 int score;
+char dirChar;
+
+std::deque<std::pair<int, int>> tail;
 
 enum class Direction {STOP, LEFT, RIGHT, UP, DOWN};
 Direction dir;
@@ -22,16 +50,18 @@ void setup()
     srand (time(NULL));
     
     dir = Direction::STOP;
-    gameOver = false;
-    score = 0;
-    x = width / 2 + xOffset;
-    y = width / 2;
-    fruitX = rand() % width + xOffset;
-    fruitY = rand() % height;
+    dirChar = ' ';
     
-    std::system("clear");
-    std::cout << "fruitX: " << fruitX << ", fruitY: " << fruitY << std::endl;
- }
+    gameOver = false;
+    ateFruit = false;
+    score = 0;
+    
+    head.first = width / 2 + xOffset;
+    head.second = width / 2;
+    
+    fruit.first = rand() % width + xOffset;
+    fruit.second = rand() % height;
+}
 
 void draw()
 {
@@ -60,17 +90,30 @@ void draw()
             }
             else
             {
-                if (row == y && col == x)
+                if (row == head.second && col == head.first)
                 {
                     std::cout << "O";
                 }
-                else if (row == fruitY && col == fruitX)
+                else if (row == fruit.second && col == fruit.first)
                 {
                     std::cout << "F";
                 }
                 else
                 {
-                    std::cout << " ";
+                    bool printTail = false;
+                    for (const auto& coord : tail)
+                    {
+                        if (col == coord.first && row == coord.second)
+                        {
+                            std::cout << "o";
+                            printTail = true;
+                        }
+                    }
+                    
+                    if (!printTail)
+                    {   
+                        std::cout << " ";
+                    }
                 }
             }            
         }    
@@ -85,13 +128,24 @@ void draw()
     
     std::cout << std::endl;
     
-    std::cout << "X: " << x - xOffset << "\nY: " << y<< std::endl;
+    std::cout << "fruitX: " << fruit.first - xOffset << ", fruitY: " << fruit.second << std::endl;
     std::cout << "score: " << score << std::endl;
+    std::cout << "X: " << head.first - xOffset << "\nY: " << head.second << std::endl;
+    std::cout << "direction char: " << dirChar << std::endl;
+    //std::cout << "direction value: " << static_cast<std::underlying_type<Direction>::type>(dir) << std::endl;
+    
+    for (const auto& item : tail)
+    {
+        std::cout << item.first - xOffset << '\t' << item.second << std::endl;
+    }
+    
 }
 
 void input()
 {
-    switch(getch())
+    dirChar = getch();
+
+    switch(dirChar)
     {
         case 'a':
             dir = Direction::LEFT;
@@ -109,62 +163,84 @@ void input()
             gameOver = true;
             break;          
         default:
+            dir = Direction::STOP;
             break;
     }
 }
 
 void logic()
 {
+    if (ateFruit)
+    {
+        tail.push_back(head);
+        ateFruit = false;
+    }
+    
+    if (!tail.empty())
+    {
+        tail.pop_back();
+        tail.push_front(head);
+    }
+
     switch (dir)
     {
         case Direction::LEFT:
-            --x;
+            --head.first;
             break;
         case Direction::RIGHT:
-            ++x;
+            ++head.first;
             break;
         case Direction::UP:
-            --y;
+            --head.second;
             break;
         case Direction::DOWN:
-            ++y;
+            ++head.second;
             break;
         default:
             break;
     }
     
-    if (x == 1 || x == width + 2 || y == -1 || y == height)
+    /*if (head.first == 1 || head.first == width + 2 || head.second == -1 || head.second == height)
     {
         gameOver = true;
     } 
+    */
 
-    if (x == fruitX && y == fruitY)
+    if (head.first == 1)
     {
+        head.first = width + 1;
+    }
+    else if (head.first == width + 2)
+    {
+        head.first = 2;
+    }
+
+    if (head.second == -1)
+    {
+        head.second = height - 1;
+    }
+    else if (head.second == height)
+    {
+        head.second = 0;
+    }
+    
+    for (const auto& coord : tail)
+    {
+        if (head.first == coord.first && head.second == coord.second)
+        {
+            gameOver = true;
+            break;
+        }
+    }
+    
+    if (head.first == fruit.first && head.second == fruit.second)
+    {
+        ateFruit = true;
         score += 10;
-        fruitX = rand() % width;
-        fruitY = rand() % height;
+        fruit.first  = rand() % width + xOffset;
+        fruit.second = rand() % height;
     }
 } 
-
-char getch() {
-        char buf = 0;
-        struct termios old = {0};
-        if (tcgetattr(0, &old) < 0)
-                perror("tcsetattr()");
-        old.c_lflag &= ~ICANON;
-        old.c_lflag &= ~ECHO;
-        old.c_cc[VMIN] = 1;
-        old.c_cc[VTIME] = 0;
-        if (tcsetattr(0, TCSANOW, &old) < 0)
-                perror("tcsetattr ICANON");
-        if (read(0, &buf, 1) < 0)
-                perror ("read()");
-        old.c_lflag |= ICANON;
-        old.c_lflag |= ECHO;
-        if (tcsetattr(0, TCSADRAIN, &old) < 0)
-                perror ("tcsetattr ~ICANON");
-        return (buf);
-}
 
 int main()
 {
@@ -176,9 +252,10 @@ int main()
         input();
         logic();
     }
-	
+
     std::cout << "Game over!" << std::endl;
     
     getchar();
-	return 0;
+    
+    return 0;
 }
