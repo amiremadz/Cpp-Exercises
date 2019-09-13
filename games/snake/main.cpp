@@ -7,7 +7,7 @@
 
 char getch() {
         char buf = 0;
-        struct termios old = { .c_oflag = 0};
+        struct termios old = {0};
         if (tcgetattr(0, &old) < 0)
                 perror("tcsetattr()");
         old.c_lflag &= ~ICANON;
