@@ -144,7 +144,7 @@ void draw()
 void input()
 {
     dirChar = getch();
-
+    
     switch(dirChar)
     {
         case 'a':
@@ -170,6 +170,11 @@ void input()
 
 void logic()
 {
+    if (dir == Direction::STOP)
+    {
+        return;
+    }
+
     if (ateFruit)
     {
         tail.push_back(head);
@@ -229,6 +234,7 @@ void logic()
         if (head.first == coord.first && head.second == coord.second)
         {
             gameOver = true;
+            std::cout << "::::::";
             break;
         }
     }
