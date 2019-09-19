@@ -44,6 +44,11 @@ std::vector<std::string> tetromino(7);
 std::vector<int> pField(nFieldWidth * nFieldHeight);
 std::vector<char> screen(nScreenLength, ' ');
 
+int nCurrentPiece;
+int nCurrentRotation;
+int nCurrentX;
+int nCurrentY;
+
 int rotate(int pX, int pY, int r)
 {
     int pI;
@@ -82,9 +87,44 @@ void make_tetrominos(std::vector<std::string> &tetromino)
     tetromino[6] = "..X...X..XX.....";
 }
 
+// nPosX: x coordinate of top left corner
+// nPosY: y coordinate of top left corner
+bool doesPeiceFit(int nTetromino, int nRotation, int nPosX, int nPosY)
+{
+    for (int pX = 0; pX < 4; ++pX)
+    {
+        for (int pY = 0; pY < 4; ++pY)
+        {
+            // index into piece
+            int pI = rotate(pX, pY, nRotation);
+              
+            // index into field
+            int pXField = nPosX + pX;
+            int pYField = nPosY + pY;
+
+            int fI = pYField * nFieldWidth + pXField;
+
+            if (pXField >= 0 && pXField < nFieldWidth && pYField >= 0 && pYField < nFieldHeight)
+            {
+                if (tetromino[nTetromino][pI] == 'X' && pField[fI] != 0)
+                {
+                    return false;
+                }
+            }
+        }
+    }
+
+    return true;
+}
+
 void setup()
 {
     gameOver = false;
+    nCurrentPiece = 0;
+    nCurrentRotation = 0;
+    nCurrentX = nFieldWidth / 2;
+    nCurrentY = 0;
+
     make_tetrominos(tetromino);
 
     for (int x = 0; x < nFieldWidth; ++x)
@@ -96,10 +136,8 @@ void setup()
     }
 }
 
-
-void draw()
+void drawField()
 {
-    // draw field
     std::string key{" ABCDEFG=#"};
 
     for (int x = 0; x < nFieldWidth; ++x)
@@ -107,18 +145,53 @@ void draw()
         for (int y = 0; y < nFieldHeight; ++y)
         {
             int idx = pField[y * nFieldWidth + x];
-            screen[(y + offset) * nScreenWidth + (x + offset)] = key[idx];
+            screen[(y + offset) * nScreenWidth + (x + offset)] = static_cast<int>(key[idx]);
         }
     }
+}
 
+void drawPiece(int idx)
+{
+    for (int pX = 0; pX < 4; ++pX)
+    {
+        for (int pY = 0; pY < 4; ++pY)
+        {
+            int pI = rotate(pX, pY, nCurrentRotation);
+
+            if (tetromino[idx][pI] == 'X')
+            {
+                int pS = (pY + nCurrentY + offset) * nScreenWidth + (pX + nCurrentX + offset);
+                screen[pS] = nCurrentPiece + 'A';
+            }
+        }
+    }
+}
+
+void drawScreen()
+{
     for (int y = 0; y < nScreenHeight; ++y)
     {
         for (int x = 0; x < nScreenWidth; ++x)
         {
-            std::cout << screen[y * nScreenWidth + x];
+            int pS = y * nScreenWidth + x;
+
+            std::cout << static_cast<char>(screen[pS]);
         }
         std::cout << std::endl;
     }
+}
+
+void draw()
+{
+    // draw field
+    drawField();
+
+    // draw current piece
+    drawPiece(nCurrentPiece);
+
+    // draw screen
+    drawScreen();
+
 }
 
 void logic() {};
@@ -136,20 +209,3 @@ int main()
     std::cout << "Exit!" << std::endl;
     return 0;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
