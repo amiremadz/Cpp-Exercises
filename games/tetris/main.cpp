@@ -30,15 +30,18 @@ const int W = 4;
 
 const int nScreenWidth = 80;
 const int nScreenHeight = 30;
-const int nScreenLength = nScreenWidth * nScreenHeight;
 
 const int nFieldWidth = 12;
 const int nFieldHeight = 18;
  
+const int offset = 4;
+
+const int nScreenLength = (nScreenWidth + offset) * (nScreenHeight + offset);
+
 bool gameOver;
 
 std::vector<std::string> tetromino(7);
-std::vector<unsigned char> pField(nFieldWidth * nFieldHeight);
+std::vector<int> pField(nFieldWidth * nFieldHeight);
 std::vector<char> screen(nScreenLength, ' ');
 
 int rotate(int pX, int pY, int r)
@@ -98,7 +101,6 @@ void draw()
 {
     // draw field
     std::string key{" ABCDEFG=#"};
-    const int offset = 2;
 
     for (int x = 0; x < nFieldWidth; ++x)
     {
@@ -109,15 +111,14 @@ void draw()
         }
     }
 
-    for (int x = 0; x < nScreenWidth; ++x)
+    for (int y = 0; y < nScreenHeight; ++y)
     {
-        for (int y = 0; y < nScreenHeight; ++y)
+        for (int x = 0; x < nScreenWidth; ++x)
         {
             std::cout << screen[y * nScreenWidth + x];
         }
         std::cout << std::endl;
     }
-
 }
 
 void logic() {};
@@ -127,11 +128,10 @@ void input() {};
 int main()
 {
     setup();
-    {
-        draw();
-        input();
-        logic();
-    }
+
+    draw();
+    input();
+    logic();
 
     std::cout << "Exit!" << std::endl;
     return 0;
