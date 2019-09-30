@@ -38,7 +38,7 @@ const int offset = 4;
 
 const int nScreenLength = (nScreenWidth + offset) * (nScreenHeight + offset);
 
-bool gameOver;
+bool bGameOver;
 
 std::vector<std::string> tetromino(7);
 std::vector<int> pField(nFieldWidth * nFieldHeight);
@@ -48,6 +48,11 @@ int nCurrentPiece;
 int nCurrentRotation;
 int nCurrentX;
 int nCurrentY;
+
+char inputKey;
+
+enum class Direction {LEFT, RIGHT, DOWN, ROTATE, UNDEFINED};
+Direction dir;
 
 int rotate(int pX, int pY, int r)
 {
@@ -72,7 +77,6 @@ int rotate(int pX, int pY, int r)
             pI = pX * W + (W - 1 - pY);
             break;
     }
-
     return pI;
 }
 
@@ -119,7 +123,7 @@ bool doesPeiceFit(int nTetromino, int nRotation, int nPosX, int nPosY)
 
 void setup()
 {
-    gameOver = false;
+    bGameOver = false;
     nCurrentPiece = 0;
     nCurrentRotation = 0;
     nCurrentX = nFieldWidth / 2;
@@ -183,6 +187,8 @@ void drawScreen()
 
 void draw()
 {
+    std::system("clear");
+
     // draw field
     drawField();
 
@@ -191,21 +197,68 @@ void draw()
 
     // draw screen
     drawScreen();
-
 }
 
-void logic() {};
+void input()
+{
+    inputKey = getch();
 
-void input() {};
+    switch (inputKey)
+    {
+        // Right
+        case 67:
+            dir = Direction::RIGHT;
+            break;
+        // Left    
+        case 68:
+            dir = Direction::LEFT;
+            break;
+        // Down
+        case 66:
+            dir = Direction::DOWN;
+            break;
+        // Rotate
+        case 'z':
+           dir = Direction::ROTATE;
+            break;
+        case 'q':
+            bGameOver = true;
+        default:
+            dir = Direction::UNDEFINED;
+            break;
+    }
+}
+
+void logic()
+{
+    if (dir == Direction::LEFT)    
+    {
+        nCurrentX -= 1;
+    }
+
+    if (dir == Direction::RIGHT)
+    {
+        nCurrentX += 1;
+    }
+
+    if (dir == Direction::DOWN)
+    {
+        nCurrentY += 1;
+    }
+}
 
 int main()
 {
     setup();
 
-    draw();
-    input();
-    logic();
+    while (!bGameOver)
+    {
+        draw();
+        input();
+        logic();
+    }
 
     std::cout << "Exit!" << std::endl;
+    
     return 0;
 }
