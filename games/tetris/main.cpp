@@ -34,7 +34,7 @@ const int nScreenHeight = 30;
 const int nFieldWidth = 12;
 const int nFieldHeight = 18;
  
-const int offset = 4;
+const int offset = 2;
 
 const int nScreenLength = (nScreenWidth + offset) * (nScreenHeight + offset);
 
@@ -91,8 +91,8 @@ void make_tetrominos(std::vector<std::string> &tetromino)
     tetromino[6] = "..X...X..XX.....";
 }
 
-// nPosX: x coordinate of top left corner
-// nPosY: y coordinate of top left corner
+// nPosX: x coordinate of top left corner of tetromino
+// nPosY: y coordinate of top left corner of tetromino
 bool doesPeiceFit(int nTetromino, int nRotation, int nPosX, int nPosY)
 {
     for (int pX = 0; pX < 4; ++pX)
@@ -124,7 +124,7 @@ bool doesPeiceFit(int nTetromino, int nRotation, int nPosX, int nPosY)
 void setup()
 {
     bGameOver = false;
-    nCurrentPiece = 0;
+    nCurrentPiece = 2;
     nCurrentRotation = 0;
     nCurrentX = nFieldWidth / 2;
     nCurrentY = 0;
@@ -233,17 +233,26 @@ void logic()
 {
     if (dir == Direction::LEFT)    
     {
-        nCurrentX -= 1;
+        if (doesPeiceFit(nCurrentPiece, nCurrentRotation, nCurrentX - 1, nCurrentY))
+        {
+            nCurrentX -= 1;
+        }
     }
 
     if (dir == Direction::RIGHT)
     {
-        nCurrentX += 1;
+        if (doesPeiceFit(nCurrentPiece, nCurrentRotation, nCurrentX + 1, nCurrentY))
+        {
+            nCurrentX += 1;
+        }
     }
 
     if (dir == Direction::DOWN)
     {
-        nCurrentY += 1;
+        if (doesPeiceFit(nCurrentPiece, nCurrentRotation, nCurrentX, nCurrentY + 1))
+        {
+            nCurrentY += 1;
+        }
     }
 }
 
