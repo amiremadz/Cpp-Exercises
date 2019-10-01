@@ -39,6 +39,7 @@ const int offset = 2;
 const int nScreenLength = (nScreenWidth + offset) * (nScreenHeight + offset);
 
 bool bGameOver;
+bool bRotateHold;
 
 std::vector<std::string> tetromino(7);
 std::vector<int> pField(nFieldWidth * nFieldHeight);
@@ -124,8 +125,11 @@ bool doesPeiceFit(int nTetromino, int nRotation, int nPosX, int nPosY)
 void setup()
 {
     bGameOver = false;
-    nCurrentPiece = 2;
+    bRotateHold = true;
+
+    nCurrentPiece = 1;
     nCurrentRotation = 0;
+    
     nCurrentX = nFieldWidth / 2;
     nCurrentY = 0;
 
@@ -253,6 +257,20 @@ void logic()
         {
             nCurrentY += 1;
         }
+    }
+
+    if (dir == Direction::ROTATE)
+    {
+        if (bRotateHold && doesPeiceFit(nCurrentPiece, nCurrentRotation + 1, nCurrentX, nCurrentY))
+        {
+            nCurrentRotation += 1;
+        }
+
+        bRotateHold = false;
+    }
+    else
+    {
+        bRotateHold = true;
     }
 }
 
