@@ -3,6 +3,7 @@
 #include <string>
 #include <termios.h>
 #include <unistd.h>
+#include <thread>
 
 char getch() 
 {
@@ -39,7 +40,7 @@ const int offset = 2;
 const int nScreenLength = (nScreenWidth + offset) * (nScreenHeight + offset);
 
 bool bGameOver;
-bool bRotateHold;
+bool bForceDown;
 
 std::vector<std::string> tetromino(7);
 std::vector<int> pField(nFieldWidth * nFieldHeight);
@@ -125,7 +126,7 @@ bool doesPeiceFit(int nTetromino, int nRotation, int nPosX, int nPosY)
 void setup()
 {
     bGameOver = false;
-    bRotateHold = true;
+    bForceDown = false;
 
     nCurrentPiece = 1;
     nCurrentRotation = 0;
@@ -265,12 +266,13 @@ void logic()
         {
             nCurrentRotation += 1;
         }
-
-        bRotateHold = false;
     }
-    else
+
+    if (bForceDown)
     {
-        bRotateHold = true;
+        // Update dificulty every 50 peices
+
+        // Test if peice can be moved down
     }
 }
 
@@ -280,6 +282,7 @@ int main()
 
     while (!bGameOver)
     {
+        std::this_thread::sleep_for(std::chrono::milliseconds(50));
         draw();
         input();
         logic();
