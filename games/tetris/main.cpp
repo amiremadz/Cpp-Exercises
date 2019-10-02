@@ -4,6 +4,22 @@
 #include <termios.h>
 #include <unistd.h>
 #include <thread>
+#include <utility>
+#include <sys/select.h>
+
+// cc.byexamples.com calls this int kbhit(), to mirror the Windows console
+// function of the same name.  Otherwise, the code is the same.
+bool inputAvailable()  
+{
+    struct timeval tv;
+    fd_set fds;
+    tv.tv_sec = 0;
+    tv.tv_usec = 0;
+    FD_ZERO(&fds);
+    FD_SET(STDIN_FILENO, &fds);
+    select(STDIN_FILENO+1, &fds, NULL, NULL, &tv);
+    return (FD_ISSET(0, &fds));
+}
 
 char getch() 
 {
@@ -43,13 +59,22 @@ bool bGameOver;
 bool bForceDown;
 
 std::vector<std::string> tetromino(7);
+
 std::vector<int> pField(nFieldWidth * nFieldHeight);
 std::vector<char> screen(nScreenLength, ' ');
 
+std::vector<int> vLines;
+
 int nCurrentPiece;
 int nCurrentRotation;
+
 int nCurrentX;
 int nCurrentY;
+
+int nSpeed;
+int nSpeedCount;
+
+int nPieceCount;
 
 char inputKey;
 
@@ -95,7 +120,7 @@ void make_tetrominos(std::vector<std::string> &tetromino)
 
 // nPosX: x coordinate of top left corner of tetromino
 // nPosY: y coordinate of top left corner of tetromino
-bool doesPeiceFit(int nTetromino, int nRotation, int nPosX, int nPosY)
+bool doesPieceFit(int nTetromino, int nRotation, int nPosX, int nPosY)
 {
     for (int pX = 0; pX < 4; ++pX)
     {
@@ -125,6 +150,9 @@ bool doesPeiceFit(int nTetromino, int nRotation, int nPosX, int nPosY)
 
 void setup()
 {
+    /* initialize random seed: */
+    srand (time(NULL));
+ 
     bGameOver = false;
     bForceDown = false;
 
@@ -133,6 +161,11 @@ void setup()
     
     nCurrentX = nFieldWidth / 2;
     nCurrentY = 0;
+
+    nSpeed = 20;
+    nSpeedCount = 0;
+
+    nPieceCount = 0;
 
     make_tetrominos(tetromino);
 
@@ -236,9 +269,12 @@ void input()
 
 void logic()
 {
+    ++nSpeedCount;
+    bForceDown = (nSpeedCount == nSpeed);
+
     if (dir == Direction::LEFT)    
     {
-        if (doesPeiceFit(nCurrentPiece, nCurrentRotation, nCurrentX - 1, nCurrentY))
+        if (doesPieceFit(nCurrentPiece, nCurrentRotation, nCurrentX - 1, nCurrentY))
         {
             nCurrentX -= 1;
         }
@@ -246,7 +282,7 @@ void logic()
 
     if (dir == Direction::RIGHT)
     {
-        if (doesPeiceFit(nCurrentPiece, nCurrentRotation, nCurrentX + 1, nCurrentY))
+        if (doesPieceFit(nCurrentPiece, nCurrentRotation, nCurrentX + 1, nCurrentY))
         {
             nCurrentX += 1;
         }
@@ -254,7 +290,7 @@ void logic()
 
     if (dir == Direction::DOWN)
     {
-        if (doesPeiceFit(nCurrentPiece, nCurrentRotation, nCurrentX, nCurrentY + 1))
+        if (doesPieceFit(nCurrentPiece, nCurrentRotation, nCurrentX, nCurrentY + 1))
         {
             nCurrentY += 1;
         }
@@ -262,7 +298,7 @@ void logic()
 
     if (dir == Direction::ROTATE)
     {
-        if (bRotateHold && doesPeiceFit(nCurrentPiece, nCurrentRotation + 1, nCurrentX, nCurrentY))
+        if (doesPieceFit(nCurrentPiece, nCurrentRotation + 1, nCurrentX, nCurrentY))
         {
             nCurrentRotation += 1;
         }
@@ -271,8 +307,74 @@ void logic()
     if (bForceDown)
     {
         // Update dificulty every 50 peices
+        nSpeedCount = 0;
+        ++nPieceCount;
+
+        /*if (nPieceCount % 50 == 0)
+        {
+            if (nSpeed >= 10)
+            {
+                --nSpeed;
+            }
+        }*/
 
         // Test if peice can be moved down
+        if (doesPieceFit(nCurrentPiece, nCurrentRotation, nCurrentX, nCurrentY + 1))
+        {
+            ++nCurrentY;
+        }
+        else
+        { 
+            // Lock the current piece in the field
+            for (int pX = 0; pX < 4; ++pX)
+            {
+                for (int pY = 0; pY < 4; ++pY)
+                {
+                    if (tetromino[nCurrentPiece][rotate(pX, pY, nCurrentRotation)] == 'X')
+                    {
+                        int idx = (nCurrentY + pY) * nFieldWidth + (nCurrentX + pX);
+                        pField[idx] = nCurrentPiece + 1;
+                    }
+                }
+            }
+            
+            // Check if we got any horizental lines
+            for (int pY = 0; pY < 4; ++pY)
+            {
+                if (pY + nCurrentY  < nFieldHeight - 1)
+                {
+                    bool bLine = true;
+
+                    for (int pX = 1; pX < nFieldWidth - 1; ++pX)
+                    {
+                        int idx = (pY + nCurrentY) * nFieldWidth + pX;
+                        bLine &= (pField[idx] != 0);
+                    }
+
+                    if (bLine)
+                    {
+                        // Remove Line, set to =
+                        for (int pX = 1; pX, nFieldWidth; ++pX)
+                        {
+                            int idx = (pY + nCurrentY) * nFieldWidth + pX;
+                            pField[idx] = 8;
+                            vLines.push_back(pY + nCurrentY);
+                        }
+                    }
+                }
+            }
+
+
+            // Choose the next piece
+            nCurrentX = nFieldWidth / 2;
+            nCurrentY = 0;
+
+            nCurrentRotation = 0;
+            nCurrentPiece = rand() % 7;
+
+            // if the piece does not fit, game is over!
+            bGameOver = !doesPieceFit(nCurrentPiece, nCurrentRotation, nCurrentX, nCurrentY);
+        }
     }
 }
 
@@ -282,7 +384,7 @@ int main()
 
     while (!bGameOver)
     {
-        std::this_thread::sleep_for(std::chrono::milliseconds(50));
+        //std::this_thread::sleep_for(std::chrono::milliseconds(50));
         draw();
         input();
         logic();
